@@ -119,6 +119,14 @@
         height: 60px;
         margin-bottom: 20px;
       }
+      #recruit-section .input-group input {
+        color: #4b6587;
+        font-size: 1.3rem;
+      }
+      #recruit-section .input-group input::placeholder {
+        color: #4b6587;
+        font-size: 1.3rem;
+      }
 
       .form-control {
         background-color: #f7f6f2;
@@ -211,10 +219,11 @@
         width: 296px;
         height: 180px;
         border-radius: 6px 6px 0 0;
-        background-image: url("https://www.wikihow.com/images_en/thumb/5/5a/Bake-Chicken-Breast-Step-1-Version-4.jpg/550px-nowatermark-Bake-Chicken-Breast-Step-1-Version-4.jpg");
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
+      }
+      .container img {
+        width: 296px;
+        height: 180px;
+        border-radius: 6px 6px 0 0;
       }
 
       .container .place-name {
@@ -239,8 +248,12 @@
         font-size: 1.1rem;
         margin: 5px 5px 5px 0;
         padding: 4px;
+        padding-left: 10px;
         background-color: #c8c6c6;
         border-radius: 0 0 0 6px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
       }
 
       .bottom-container .people-stat {
@@ -302,9 +315,68 @@
 
     <script>
       $(document).ready(function () {
-        listing();
+        resetInput();
+        renderCard();
       });
 
+      function renderCard() {
+        $.ajax({
+          type: "GET",
+          url: "/posts",
+          data: {},
+          success: function (response) {
+            let row = response.cards;
+            row.forEach((element) => {
+              let title = element.title;
+              let img = element.img;
+              let place = element.place;
+              let people = element.people;
+              let time = element.time;
+
+              let cardHtml = `
+                <div class="col">
+                  <div
+                    class="hover-layer"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  >
+                  <span class="hover-btn">신청하러 가기!</span>
+                  </div>
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <h5 class="card-title">${title}</h5>
+                      <div class="container">
+                        <img src='${img}' alt='가게사진' />
+                        <div class="place-name">${place}</div>
+                      </div>
+                      <div class="bottom-container">
+                        <p class="card-text">
+                          <span>모임시간</span>
+                          <span>${time}</span>
+                        </p>
+                        <div class="people-stat">
+                          <img src="" alt="icon" />
+                          3/${people}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              `;
+              $(".row").append(cardHtml);
+            });
+          },
+        });
+      }
+      function resetInput() {
+        for (i = 0; i <= 3; i++) {
+          let input = $(".input-group input")[i].value;
+          if (input != "") {
+            $(".input-group input")[i].value = "";
+          } else if (input == "") {
+            continue;
+          }
+        }
+      }
       function listing() {
         $.ajax({
           type: "GET",
@@ -314,29 +386,29 @@
         });
       }
 
-      function posting() {
-        let place = $("#url").val();
+      function cardPosting() {
+        let title = $("#title-input").val();
+        let place = $("#place-input").val();
+        let people = $("#people-input").val();
+        let time = $("#time-input").val();
 
         $.ajax({
           type: "POST",
           url: "/posts",
           data: {
-            place_give: place.replace(" ", "+"),
+            title_give: title,
+            place_give: place,
+            people_give: people,
+            time_give: time,
           },
           success: function (response) {
-            console.log(response["msg"]);
+            alert(response["msg"]);
             window.location.reload();
           },
         });
       }
 
-      function open_box() {
-        $("#post-box").show();
-      }
-
-      function close_box() {
-        $("#post-box").hide();
-      }
+      function close_card() {}
 
       //모임신청을 위한 버튼함수
       function join() {
@@ -371,135 +443,34 @@
             class="form-control"
             placeholder="제목"
             aria-label="title"
+            id="title-input"
           />
           <input
             type="text"
             class="form-control"
             placeholder="상호명"
             aria-label="place-name"
+            id="place-input"
           />
           <input
-            type="text"
+            type="number"
             class="form-control"
             placeholder="인원수"
             aria-label="people"
+            id="people-input"
           />
           <input
             type="text"
             class="form-control"
             placeholder="모임시간"
             aria-label="meet-time"
+            id="time-input"
           />
         </div>
-        <button id="recruit-btn">인원 모집하기</button>
+        <button id="recruit-btn" onclick="cardPosting()">인원 모집하기</button>
       </div>
       <div id="card-section">
-        <div class="row row-cols-3 row-cols-md-3">
-          <div class="col">
-            <div
-              class="hover-layer"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              <span class="hover-btn">신청하러 가기!</span>
-            </div>
-            <div class="card text-center">
-              <div class="card-body">
-                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
-                <div class="container">
-                  <div class="place-name">닭가슴살 전문점</div>
-                </div>
-                <div class="bottom-container">
-                  <p class="card-text">
-                    제주특별자치도 제주시 어딘가에 사는 중
-                  </p>
-                  <div class="people-stat">
-                    <img src="" alt="icon" />
-                    3/4
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div
-              class="hover-layer"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              <span class="hover-btn">신청하러 가기!</span>
-            </div>
-            <div class="card text-center">
-              <div class="card-body">
-                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
-                <div class="container">
-                  <div class="place-name">닭가슴살 전문점</div>
-                </div>
-                <div class="bottom-container">
-                  <p class="card-text">
-                    제주특별자치도 제주시 어딘가에 사는 중
-                  </p>
-                  <div class="people-stat">
-                    <img src="" alt="icon" />
-                    3/4
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div
-              class="hover-layer"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              <span class="hover-btn">신청하러 가기!</span>
-            </div>
-            <div class="card text-center">
-              <div class="card-body">
-                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
-                <div class="container">
-                  <div class="place-name">닭가슴살 전문점</div>
-                </div>
-                <div class="bottom-container">
-                  <p class="card-text">
-                    제주특별자치도 제주시 어딘가에 사는 중
-                  </p>
-                  <div class="people-stat">
-                    <img src="" alt="icon" />
-                    3/4
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div
-              class="hover-layer"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              <span class="hover-btn">신청하러 가기!</span>
-            </div>
-            <div class="card text-center">
-              <div class="card-body">
-                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
-                <div class="container">
-                  <div class="place-name">닭가슴살 전문점</div>
-                </div>
-                <div class="bottom-container">
-                  <p class="card-text">
-                    제주특별자치도 제주시 어딘가에 사는 중
-                  </p>
-                  <div class="people-stat">
-                    <img src="" alt="icon" />
-                    3/4
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="row row-cols-3 row-cols-md-3"></div>
       </div>
     </div>
     <div
