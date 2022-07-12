@@ -72,7 +72,16 @@
         font-weight: 600;
         color: #4b6587;
       }
-
+      #logout-btn {
+        height: 80px;
+        color: #4b6587;
+        font-size: 2.6rem;
+        letter-spacing: 0.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 400;
+      }
       #username {
         height: 80px;
         color: #4b6587;
@@ -301,34 +310,7 @@
           type: "GET",
           url: "/movie",
           data: {},
-          success: function (response) {
-            let movieRows = response.movies;
-            $("#cards-box").empty();
-
-            movieRows.forEach((element) => {
-              let img = element.img;
-              let title = element.title;
-              let desc = element.desc;
-              const star = "⭐";
-              let rate = element.rate;
-              let comment = element.comment;
-
-              let cardHtml = `
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src=${img} class="card-img-top"/>
-                            <div class="card-body">
-                                <h5 class="card-title">${title}</h5>
-                                <p class="card-text">${desc}</p>
-                                <p>${star.repeat(parseInt(rate))}</p>
-                                <p class="mycomment">${comment}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-              $("#cards-box").append(cardHtml);
-            });
-          },
+          success: function (response) {},
         });
       }
 
@@ -378,7 +360,8 @@
         <img src="../static/small-icon.png" alt="logo" />
         <span id="logo-title"> 밥먹자 </span>
       </div>
-      <div id="username">< username></div>
+      <div id="logout-btn">＜/<span>Logout</span>＞</div>
+      <div id="username">＜<span>Login first</span>＞</div>
     </header>
     <div id="wrap">
       <div id="recruit-section">
@@ -439,53 +422,80 @@
             </div>
           </div>
           <div class="col">
+            <div
+              class="hover-layer"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              <span class="hover-btn">신청하러 가기!</span>
+            </div>
             <div class="card text-center">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
                 <div class="container">
-                  <img src="..." class="card-img-top" alt="..." />
-                  <div class="title">상호명</div>
+                  <div class="place-name">닭가슴살 전문점</div>
                 </div>
-
-                <p class="card-text">
-                  This is a longer card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
+                <div class="bottom-container">
+                  <p class="card-text">
+                    제주특별자치도 제주시 어딘가에 사는 중
+                  </p>
+                  <div class="people-stat">
+                    <img src="" alt="icon" />
+                    3/4
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="col">
+            <div
+              class="hover-layer"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              <span class="hover-btn">신청하러 가기!</span>
+            </div>
             <div class="card text-center">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
                 <div class="container">
-                  <img src="..." class="card-img-top" alt="..." />
-                  <div class="title">상호명</div>
+                  <div class="place-name">닭가슴살 전문점</div>
                 </div>
-
-                <p class="card-text">
-                  This is a longer card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
+                <div class="bottom-container">
+                  <p class="card-text">
+                    제주특별자치도 제주시 어딘가에 사는 중
+                  </p>
+                  <div class="people-stat">
+                    <img src="" alt="icon" />
+                    3/4
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="col">
+            <div
+              class="hover-layer"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              <span class="hover-btn">신청하러 가기!</span>
+            </div>
             <div class="card text-center">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
                 <div class="container">
-                  <img src="..." class="card-img-top" alt="..." />
-                  <div class="title">상호명</div>
+                  <div class="place-name">닭가슴살 전문점</div>
                 </div>
-
-                <p class="card-text">
-                  This is a longer card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
+                <div class="bottom-container">
+                  <p class="card-text">
+                    제주특별자치도 제주시 어딘가에 사는 중
+                  </p>
+                  <div class="people-stat">
+                    <img src="" alt="icon" />
+                    3/4
+                  </div>
+                </div>
               </div>
             </div>
           </div>
