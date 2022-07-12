@@ -1,7 +1,7 @@
 
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://test:sparta@cluster0.0wupi.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbsparta_plus_week4
+db = client.eattogether
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 app = Flask(__name__)
