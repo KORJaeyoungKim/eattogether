@@ -1,9 +1,10 @@
-
 from pymongo import MongoClient
+
 client = MongoClient('mongodb+srv://test:sparta@cluster0.0wupi.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.eattogether
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+
 app = Flask(__name__)
 
 from selenium import webdriver
@@ -53,8 +54,8 @@ def sign_in():
 
     if result is not None:
         payload = {
-         'id': id_receive,
-         # 'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+            'id': id_receive,
+            # 'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -62,6 +63,17 @@ def sign_in():
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+    @app.route("/join", methods=["POST"])
+    def homework_post():
+        number_receive = request.form['number']
+        doc = {
+            'number': number_receive,
+        }
+        db.join.insert_one(doc)
+
+        return jsonify({'msg': '신청 완료!'})
+
 
 @app.route("/posts", methods=["POST"])
 def movie_post():
@@ -72,18 +84,20 @@ def movie_post():
     driver = webdriver.Firefox()
     time.sleep(1)
     driver.get("https://www.google.co.kr/imghp?hl=ko&tab=wi&authuser=0&ogbl")
-    elem = driver.find_element(By.NAME,"q") #구글 검색창 선택
-    elem.send_keys(place_receive) # 검색창에 검색할 내용(name)넣기
-    elem.send_keys(Keys.RETURN) # 검색할 내용을 넣고 enter를 치는것!
+    elem = driver.find_element(By.NAME, "q")  # 구글 검색창 선택
+    elem.send_keys(place_receive)  # 검색창에 검색할 내용(name)넣기
+    elem.send_keys(Keys.RETURN)  # 검색할 내용을 넣고 enter를 치는것!
     time.sleep(1)
-    driver.find_element(By.XPATH,'/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img').click()            
+    driver.find_element(By.XPATH,
+                        '/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img').click()
     time.sleep(1)
     imgUrl = driver.find_element(By.XPATH,
-                '/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img').get_attribute(
-                "src")
+                                 '/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img').get_attribute(
+        "src")
     print(imgUrl)
 
-    return jsonify({'msg':'sucess'})
+    return jsonify({'msg': 'sucess'})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
