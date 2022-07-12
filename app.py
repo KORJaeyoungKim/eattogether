@@ -38,11 +38,5 @@ def movie_post():
 
     return jsonify({'msg':'sucess'})
 
-@app.route("/movie", methods=["GET"])
-def movie_get():
-    movie_list = list(db.movies.find({}, {'_id' : False}))
-    print('done')
-    return jsonify({'movies': movie_list})
-
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
