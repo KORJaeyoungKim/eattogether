@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <title>loginPage</title>
+    <!-- Bulma CSS 링크 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <style>
+        .background {
+            {#background-color: green;#}
+            max-width: 2000px;
+            height: 800px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background > .wrap {
+            max-width: 400px;
+            width: 50%;
+
+            height: 220px;
+
+            box-shadow: 0px 0px 3px 0px gray;
+
+            padding: 20px;
+            float: left;
+        }
+
+        .wrap > .mybtn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+
+    </style>
+    <script>
+        //모달 토글 시도
+        // function toggle_sign_up() {
+        //     $("#whole1").toggleClass("is-hidden")
+        // }
+        function sign_in() {
+            let id = $("#input-id").val()
+            let pw = $("#input-pw").val()
+
+            if (id == "") {
+                $("#help-id-login").text("아이디를 입력해주세요.")
+                $("#input-id").focus()
+                return;
+            } else {
+                $("#help-id-login").text("")
+            }
+
+            if (pw == "") {
+                $("#help-password-login").text("비밀번호를 입력해주세요.")
+                $("#input-pw").focus()
+                return;
+            } else {
+                $("#help-password-login").text("")
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    id_give: id,
+                    pw_give: pw
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token'], {path: '/'});
+                        window.location.replace("/")
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+    <body>
+        <section  id="whole1" class="background">
+            <div  style="max-width: 230px; width: 35%; height:230px; float: left;">
+                    <img src="data:image/jpeg;base64,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"
+                         class="img-thumbnail" alt="logo">
+                </div>
+                <div class="wrap">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">ID</span>
+                        <input id="input-id" type="text" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <p id="help-id-login" style="font-size: small; color: red"></p>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">PW</span>
+                        <input id="input-pw" type="password" class="form-control" aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <p id="help-password-login" style="font-size: small; color: red"></p>
+                    <div class="mybtn">
+                        <button type="button" class="btn btn-dark" onclick='$("modal-post").addClass("is-active")' style="font-size: small">아직 계정이<br>
+                            없으신가요?
+                        </button>&nbsp; &nbsp;
+                        <button type="button" class="btn btn-dark" style="width: 100px; height: 50px" onclick="sign_in()">로그인</button>
+                        <hr>
+                    </div>
+            </div>
+        </section>
+
+    </body>
+
+</html>
