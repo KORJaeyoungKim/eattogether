@@ -32,9 +32,25 @@
         font-family: "Gowun Dodum", sans-serif;
         box-sizing: border-box;
       }
+
+      #page-logo {
+        display: flex;
+        align-items: center;
+      }
+      #page-logo img {
+        width: 70px;
+        height: 70px;
+        margin-right: 8px;
+      }
+      #page-logo #logo-title {
+        font-size: 3rem;
+        font-weight: 600;
+        color: #4b6587;
+      }
       body {
         background-color: #f0e5cf;
       }
+
       header {
         position: sticky;
         top: 0;
@@ -48,18 +64,9 @@
         max-width: 1200px;
         border-bottom: 8px double #4b6587;
         background-color: #f0e5cf;
-        z-index: 9999;
+        z-index: 1000;
       }
 
-      #page-logo {
-        display: flex;
-        align-items: center;
-      }
-      #page-logo img {
-        width: 70px;
-        height: 70px;
-        margin-right: 8px;
-      }
       #page-logo #logo-title {
         font-size: 3rem;
         font-weight: 600;
@@ -76,6 +83,7 @@
         align-items: center;
         font-weight: 400;
       }
+
       #wrap {
         display: flex;
         flex-direction: column;
@@ -123,6 +131,7 @@
       #card-section {
         border-radius: 6px;
       }
+
       #card-section .row {
         padding: 8px;
         background: none;
@@ -133,6 +142,7 @@
         width: 330px;
         height: 330px;
       }
+
       .col {
         position: relative;
         padding: 0;
@@ -140,10 +150,12 @@
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
           0 6px 20px 0 rgba(0, 0, 0, 0.19);
       }
+
       .card-body {
         background-color: #f7f6f2;
         padding: 8px 16px 0 16px;
       }
+
       .card-title {
         padding-bottom: 4px;
         border-bottom: 1px solid #4b6587;
@@ -205,6 +217,7 @@
         text-align: center;
         font-size: 1.3rem;
       }
+
       .bottom-container {
         display: flex;
         width: 296px;
@@ -220,6 +233,7 @@
         background-color: #c8c6c6;
         border-radius: 0 0 0 6px;
       }
+
       .bottom-container .people-stat {
         width: 90px;
         height: 90px;
@@ -230,6 +244,50 @@
         font-size: 1.5rem;
         background-color: #c8c6c6;
         border-radius: 0 0 6px 0;
+      }
+
+      .img-fluid {
+        height: 400px;
+        width: 100%;
+      }
+
+      .place {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .display-3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+        background-color: white;
+        width: 90%;
+      }
+
+      .host {
+        padding-left: 50px;
+      }
+
+      .guest {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+      }
+
+      .field {
+        background-color: #e2e2e2;
+        width: 700px;
+        margin: auto;
+        height: 100%;
+      }
+
+      .detailcard {
+        margin: 5px;
+        border: 1px solid black;
       }
     </style>
 
@@ -293,8 +351,23 @@
       function open_box() {
         $("#post-box").show();
       }
+
       function close_box() {
         $("#post-box").hide();
+      }
+
+      //모임신청을 위한 버튼함수
+      function join() {
+        let number = "10";
+        $.ajax({
+          type: "POST",
+          url: "/join",
+          data: { number: number },
+          success: function (response) {
+            alert(response["msg"]);
+            window.location.reload();
+          },
+        });
       }
     </script>
   </head>
@@ -340,7 +413,11 @@
       <div id="card-section">
         <div class="row row-cols-3 row-cols-md-3">
           <div class="col">
-            <div class="hover-layer">
+            <div
+              class="hover-layer"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
               <span class="hover-btn">신청하러 가기!</span>
             </div>
             <div class="card text-center">
@@ -411,6 +488,62 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">카드 상세보기</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="field">
+              <img
+                src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/4BYf/image/_pc0k6Jz3BHHLVwylaQYEPZdQd0.jfif"
+                class="img-fluid"
+                alt="..."
+              />
+              <div class="place">
+                <h4 class="display-3">라화쿵부 서울직영점</h4>
+              </div>
+              <h4 class="host">방장 : OOO(잔여 인원 : 00명)</h4>
+              <div class="guest">
+                {% for i in range(10) %}
+                <div class="detailcard" style="width: 18rem">
+                  <div class="card-body">
+                    <h5 class="card-title">신청자 : OOO</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">010-0000-0000</h6>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button onclick="join()" type="button" class="btn btn-primary">
+              신청하기
+            </button>
           </div>
         </div>
       </div>
