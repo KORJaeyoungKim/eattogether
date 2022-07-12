@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52b7a3b2-b746-4a93-a3cd-0a464e3c1f6f" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/eattogether.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/eattogether.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +41,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/Desktop/ppp&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dhaud/OneDrive/바탕 화면/eattogether&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -104,6 +106,10 @@
       <option name="presentableId" value="Default" />
       <updated>1657612469081</updated>
       <workItem from="1657612470626" duration="4982000" />
+      <workItem from="1657620566623" duration="3000" />
+      <workItem from="1657620585466" duration="32000" />
+      <workItem from="1657620631329" duration="620000" />
+      <workItem from="1657621258889" duration="104000" />
     </task>
     <servers />
   </component>
