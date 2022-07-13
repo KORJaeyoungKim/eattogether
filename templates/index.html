@@ -515,29 +515,12 @@
           e.value = e.value.slice(0, e.maxLength);
         }
       }
-<<<<<<< HEAD
         function sign_out(){
           $.removeCookie('mytoken', { path: '/' });
           alert('로그아웃!')
           window.location.href = "/login"
         }
-      //로그인, 로그아웃 toggle show hide
-      // 토큰 갖고 있으면 로그인 안보여, 안갖고 있으면 보여
-      {#function cookie_login(){#}
-      {#    if ()#}
-      {#}#}
-      {#$(document).ready(function () {#}
-      {#    $("#hide").click(function () {#}
-      {#        $("p").hide();#}
-      {#    });#}
-      {#    $("#show").click(function () {#}
-      {#        $("p").show();#}
-      {#    });#}
-      {#});#}
-</script>
 
-
-=======
      //모임신청을 위한 버튼함수
         function join(idxNum) {
             $.ajax({
@@ -551,16 +534,14 @@
                 },
             });
         }
->>>>>>> 06bedea4c11ac9b8b769d70146a5ae4865f747e2
+
     </script>
 </head>
-
 <body>
 <header>
     <div id="page-logo">
         <img src="../static/small-icon.png" alt="logo"/>
         <span id="logo-title"> 밥먹자 </span>
-<<<<<<< HEAD
       </div>
       <div id="logout-btn">
           <button onclick="sign_out()">Logout</button>
@@ -573,14 +554,6 @@
     </header>
     <div id="wrap">
       <div id="recruit-section">
-=======
-    </div>
-    <div id="logout-btn">＜/<span>Logout</span>＞</div>
-    <div id="username">＜<span>Login first</span>＞</div>
-</header>
-<div id="wrap">
-    <div id="recruit-section">
->>>>>>> 06bedea4c11ac9b8b769d70146a5ae4865f747e2
         <div class="input-group">
           <input
             type="text"
