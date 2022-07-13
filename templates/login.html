@@ -185,7 +185,7 @@
               alert("아이디를 입력하세요!")
               return;
           }else if (!is_nickname(username)){
-              alert("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-15자 길이")
+              alert("아이디의 형식을 확인해주세요. 한글과 숫자,영어 일부 특수문자(._-) 사용 가능. 2-15자 길이")
               let obj = $('#join_id'); //클릭후 이상있으면  input 텍스트박스 리셋
               for(let i=0;i<obj.length;i++){
                   obj[i].value='';
@@ -241,7 +241,7 @@
       }
 
       function is_nickname(asValue) {
-          let regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,15}$/;
+          let regExp = /^(?=.*[a-zA-Zㄱ-힣])[-a-zA-Zㄱ-힝0-9_.]{2,15}$/;
           console.log(regExp.test(asValue))
           return regExp.test(asValue);
       }
