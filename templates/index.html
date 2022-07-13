@@ -454,6 +454,20 @@ TimePicker */
           transform: rotate(360deg);
         }
       }
+
+      {#로그아웃버튼 호버#}
+      .show-hover {
+          display: none;
+          font-weight: bolder;
+      }
+
+      .hover:hover .show-hover {
+          display: block;
+      }
+
+      .hover:hover .hidden-hover {
+          display: none;
+      }
     </style>
 
     <script>
@@ -467,14 +481,13 @@ TimePicker */
       });
       function DataSend(idx) {
         $("#detailCard").empty();
-        console.log("idx", idx);
         $.ajax({
           type: "GET",
           url: "/DataSend",
           data: { index_give: idx },
           success: function (response) {
             let info = response.cards;
-            console.log("rows", info);
+            let guest_info = response.guest;
             let temp_html = `  <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">카드 상세보기</h5>
                 <button
@@ -494,17 +507,20 @@ TimePicker */
                     <div class="place">
                         <h4 class="display-3">${info.place}</h4>
                     </div>
-                    <h4 class="host">방장 : OOO(잔여 인원 : 00명)</h4>
-                    <div class="guest">
-                        {% for i in range(10) %}
-                            <div class="detailcard" style="width: 18rem">
+                    <h4 class="host">방장 : ${info.leaderId}(잔여 인원 : ${info.people-guest_info.length}명)</h4>
+                    <div class="guest">`
+              for (let el of guest_info) {
+                  let phoneNumber = el['phone']
+                  if(response.check==='false')phoneNumber = '010-****-****'
+                  temp_html += `<div class="detailcard" style="width: 18rem">
                                 <div class="card-body">
-                                    <h5 class="card-title">신청자 : OOO</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">010-0000-0000</h6>
+                                    <h5 class="card-title">신청자 : ${el['id']}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">${phoneNumber}</h6>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                            </div>`
+              }
+
+               temp_html+=`</div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -515,7 +531,7 @@ TimePicker */
                 >
                     Close
                 </button>
-                <button onclick="join(${info.index})" type="button" class="btn btn-primary">
+                <button onclick="join(${info.index},${info.people-guest_info.length})" type="button" class="btn btn-primary">
                     신청하기
                 </button>
             </div>`;
@@ -537,6 +553,7 @@ TimePicker */
               let place = element.place;
               let people = element.people;
               let time = element.time;
+              let count = element.count;
 
               let cardHtml = `
                 <div class="col" onclick="DataSend(${element.index})">
@@ -561,7 +578,7 @@ TimePicker */
                         </p>
                         <div class="people-stat">
                           <img src="../static/group-icon.png" alt="icon" />
-                          3/${people}
+                          ${count}/${people}
                         </div>
                       </div>
                     </div>
@@ -582,15 +599,6 @@ TimePicker */
             continue;
           }
         }
-      }
-
-      function listing() {
-        $.ajax({
-          type: "GET",
-          url: "/movie",
-          data: {},
-          success: function (response) {},
-        });
       }
 
       function cardPosting() {
@@ -650,15 +658,23 @@ TimePicker */
       }
 
       //모임신청을 위한 버튼함수
-      function join(idxNum) {
+      function join(idxNum,guest_count) {
+        let check = $.cookie('mytoken');
+        if(check === undefined){
+            alert('로그인을 해야 신청할수 있습니다.');
+            return
+        }
+        if(guest_count === 0){
+            alert('모집완료된 게시글입니다.');
+            return
+        }
         $.ajax({
           type: "POST",
           url: "/join",
           data: { number: idxNum },
           success: function (response) {
-            console.log(response["msg"]);
             alert(response["msg"]);
-            window.location.reload();
+            if(response["msg"] == '신청 완료!')window.location.reload();
           },
         });
       }
@@ -686,17 +702,18 @@ TimePicker */
         <img src="../static/small-icon.png" alt="logo" />
         <span id="logo-title"> 밥먹자 </span>
       </div>
-      <div id="logout-btn">
-        <button onclick="sign_out()">
-          <span>&lt;</span>/Logout<span>&gt;</span>
-        </button>
-      </div>
-
-      <div id="username">
-        <button onclick="window.location.href='/signup'">
-          <span>&lt;</span>Login first<span>&gt;</span>
-        </button>
-      </div>
+        {% if status == 0 %}
+            <div id="username">
+                <button onclick="window.location.href='/signup'">Login first</button>
+            </div>
+        {% elif status ==1 %}
+            <div id="logout-btn">
+                <button type="button" class="hover" onclick="sign_out()">
+                    <div class="hidden-hover">{{ user_id }}</div>
+                    <div class="show-hover">Logout</div>
+                </button>
+            </div>
+        {% endif %}
     </header>
     <div id="wrap">
       <div id="recruit-section">
