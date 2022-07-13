@@ -682,11 +682,11 @@
           <input
             type="number"
             class="form-control"
-            placeholder="인원수(2 이상)"
+            placeholder="인원수(1 이상)"
             aria-label="people"
             id="people-input"
-            min="2"
-            oninput="this.value = this.value.replace(/[^2-9.]/g, '').replace(/(\..*)\./g, '$1');"
+            min="1"
+            oninput="this.value = this.value.replace(/[^1-9.]/g, '').replace(/(\..*)\./g, '$1');"
           />
           <input
             type="text"
