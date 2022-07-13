@@ -103,11 +103,34 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
       }
       .joinbtn > button{
           margin-right: 20px;
-            margin-bottom: 30px;
+          margin-bottom: 30px;
+          background-color: transparent;
+
       }
+
+      #modal_back{
+          background-color: #f7f6f2;
+          border-radius: 30px;
+      }
+
+      button.btn:nth-child(1) { {#밖에 조인이랑 연결되어있음#}
+          height: 50px;
+          color: #4b6587;
+      }
+
+      #exampleModal .joinbtn button:hover {
+          color: white;
+          background: #4b6587;
+          border: 1px solid #4b6587;
+          transition: all 0.3s;
+      }
+
+
+
 
     </style>
     <script>
@@ -202,7 +225,10 @@
               }
           }
       }
-            
+
+      function sign_close() {
+          window.location.replace("/login")
+      }
     </script>
   </head>
   <body>
@@ -262,7 +288,7 @@
       </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content" id="modal_back">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">회원가입</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -287,8 +313,8 @@
 
       </div>
 
-      <div class="joinbtn">
-        <button type="button" class="btn btn-outline-primary">뒤로가기</button> <!-- 버튼색상확인  -->
+      <div class="joinbtn" >
+        <button type="button" class="btn btn-secondary" onclick="sign_close()" >뒤로가기</button> <!-- 버튼색상확인  -->
         <button type="button" class="btn btn-secondary" onclick="sign_up()">가입하기!</button>
       </div>
     </div>
