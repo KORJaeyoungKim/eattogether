@@ -513,34 +513,6 @@
           e.value = e.value.slice(0, e.maxLength);
         }
       }
-<<<<<<< HEAD
-        function sign_out(){
-          $.removeCookie('mytoken', { path: '/' });
-          alert('로그아웃!')
-          window.location.href = "/login"
-        }
-
-     //모임신청을 위한 버튼함수
-        function join(idxNum) {
-            $.ajax({
-                type: "POST",
-                url: "/join",
-                data: {number: idxNum},
-                success: function (response) {
-                    console.log(response["msg"])
-                    alert(response["msg"]);
-                    window.location.reload();
-                },
-            });
-        }
-
-    </script>
-</head>
-<body>
-<header>
-    <div id="page-logo">
-        <img src="../static/small-icon.png" alt="logo"/>
-=======
       function sign_out() {
         $.removeCookie("mytoken", { path: "/" });
         alert("로그아웃!");
@@ -567,7 +539,6 @@
     <header>
       <div id="page-logo">
         <img src="../static/small-icon.png" alt="logo" />
->>>>>>> 43d6287c8803427f5de74cfb011725bf218ef359
         <span id="logo-title"> 밥먹자 </span>
       </div>
       <div id="logout-btn">
