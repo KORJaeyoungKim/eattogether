@@ -174,6 +174,10 @@
       }
 
       .card-title {
+        color: #4b6587;
+        font-weight: 400;
+        font-size: 1.5rem;
+        letter-spacing: 0.1rem;
         padding-bottom: 4px;
         border-bottom: 1px solid #4b6587;
       }
@@ -254,6 +258,11 @@
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+      }
+
+      .bottom-container p span {
+        font-size: 1.3rem;
+        letter-spacing: 0.2rem;
       }
 
       .bottom-container .people-stat {
@@ -410,6 +419,11 @@
 
       function close_card() {}
 
+      function numberMaxLength(e) {
+        if (e.value.length > e.maxLength) {
+          e.value = e.value.slice(0, e.maxLength);
+        }
+      }
       //모임신청을 위한 버튼함수
       function join() {
         let number = "10";
@@ -441,9 +455,11 @@
           <input
             type="text"
             class="form-control"
-            placeholder="제목"
+            placeholder="제목(최대12자)"
             aria-label="title"
             id="title-input"
+            maxlength="12"
+            oninput="numberMaxLength(this)"
           />
           <input
             type="text"
