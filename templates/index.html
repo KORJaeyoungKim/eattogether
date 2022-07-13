@@ -338,10 +338,15 @@
         margin-top: 5px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-evenly;
+        align-items: center;
         font-size: 1.5rem;
         background-color: #c8c6c6;
         border-radius: 0 0 6px 0;
+      }
+      .bottom-container .people-stat img {
+        width: 40px;
+        height: 40px;
       }
 
       .img-fluid {
@@ -530,7 +535,7 @@
                           <span>${time}</span>
                         </p>
                         <div class="people-stat">
-                          <img src="" alt="icon" />
+                          <img src="../static/group-icon.png" alt="icon" />
                           3/${people}
                         </div>
                       </div>
