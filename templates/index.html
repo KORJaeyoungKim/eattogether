@@ -80,8 +80,15 @@
         font-weight: 600;
         color: #4b6587;
       }
-
+      #logout-btn {
+        width: 234px;
+        position: absolute;
+        top: 5px;
+        left: 950px;
+        z-index: 100;
+      }
       #logout-btn button {
+        width: 234px;
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -92,12 +99,14 @@
         font-weight: 400;
         background-color: #f0e5cf;
         border: none;
+        z-index: 101;
+        opacity: 0;
       }
 
       #logout-btn button:hover {
-        -webkit-animation: tracking-in-expand 0.8s
+        -webkit-animation: tracking-in-expand 0.5s
           cubic-bezier(0.215, 0.61, 0.355, 1) both;
-        animation: tracking-in-expand 0.8s cubic-bezier(0.215, 0.61, 0.355, 1)
+        animation: tracking-in-expand 0.5s cubic-bezier(0.215, 0.61, 0.355, 1)
           both;
       }
       @-webkit-keyframes tracking-in-expand {
@@ -125,7 +134,7 @@
         }
       }
 
-      #username button {
+      #username {
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -201,8 +210,6 @@
         font-size: 1.1rem;
         color: #4b6587;
       }
-      /* jQuery35107505279612393892
-TimePicker */
 
       .card-title {
         color: #4b6587;
@@ -455,18 +462,17 @@ TimePicker */
         }
       }
 
-      {#로그아웃버튼 호버#}
       .show-hover {
-          display: none;
-          font-weight: bolder;
+        display: none;
+        font-weight: bolder;
       }
 
       .hover:hover .show-hover {
-          display: block;
+        display: block;
       }
 
       .hover:hover .hidden-hover {
-          display: none;
+        display: none;
       }
     </style>
 
@@ -507,20 +513,22 @@ TimePicker */
                     <div class="place">
                         <h4 class="display-3">${info.place}</h4>
                     </div>
-                    <h4 class="host">방장 : ${info.leaderId}(잔여 인원 : ${info.people-guest_info.length}명)</h4>
-                    <div class="guest">`
-              for (let el of guest_info) {
-                  let phoneNumber = el['phone']
-                  if(response.check==='false')phoneNumber = '010-****-****'
-                  temp_html += `<div class="detailcard" style="width: 18rem">
+                    <h4 class="host">방장 : ${info.leaderId}(잔여 인원 : ${
+              info.people - guest_info.length
+            }명)</h4>
+                    <div class="guest">`;
+            for (let el of guest_info) {
+              let phoneNumber = el["phone"];
+              if (response.check === "false") phoneNumber = "010-****-****";
+              temp_html += `<div class="detailcard" style="width: 18rem">
                                 <div class="card-body">
-                                    <h5 class="card-title">신청자 : ${el['id']}</h5>
+                                    <h5 class="card-title">신청자 : ${el["id"]}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">${phoneNumber}</h6>
                                 </div>
-                            </div>`
-              }
+                            </div>`;
+            }
 
-               temp_html+=`</div>
+            temp_html += `</div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -531,7 +539,9 @@ TimePicker */
                 >
                     Close
                 </button>
-                <button onclick="join(${info.index},${info.people-guest_info.length})" type="button" class="btn btn-primary">
+                <button onclick="join(${info.index},${
+              info.people - guest_info.length
+            })" type="button" class="btn btn-primary">
                     신청하기
                 </button>
             </div>`;
@@ -654,19 +664,19 @@ TimePicker */
       function sign_out() {
         $.removeCookie("mytoken", { path: "/" });
         alert("로그아웃!");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
 
       //모임신청을 위한 버튼함수
-      function join(idxNum,guest_count) {
-        let check = $.cookie('mytoken');
-        if(check === undefined){
-            alert('로그인을 해야 신청할수 있습니다.');
-            return
+      function join(idxNum, guest_count) {
+        let check = $.cookie("mytoken");
+        if (check === undefined) {
+          alert("로그인을 해야 신청할수 있습니다.");
+          return;
         }
-        if(guest_count === 0){
-            alert('모집완료된 게시글입니다.');
-            return
+        if (guest_count === 0) {
+          alert("모집완료된 게시글입니다.");
+          return;
         }
         $.ajax({
           type: "POST",
@@ -674,7 +684,7 @@ TimePicker */
           data: { number: idxNum },
           success: function (response) {
             alert(response["msg"]);
-            if(response["msg"] == '신청 완료!')window.location.reload();
+            if (response["msg"] == "신청 완료!") window.location.reload();
           },
         });
       }
@@ -702,18 +712,20 @@ TimePicker */
         <img src="../static/small-icon.png" alt="logo" />
         <span id="logo-title"> 밥먹자 </span>
       </div>
-        {% if status == 0 %}
-            <div id="username">
-                <button onclick="window.location.href='/signup'">Login first</button>
-            </div>
-        {% elif status ==1 %}
-            <div id="logout-btn">
-                <button type="button" class="hover" onclick="sign_out()">
-                    <div class="hidden-hover">{{ user_id }}</div>
-                    <div class="show-hover">Logout</div>
-                </button>
-            </div>
-        {% endif %}
+      {% if status == 0 %}
+      <div id="username">
+        <button onclick="window.location.href='/signup'">
+          &lt;Login first&gt;
+        </button>
+      </div>
+      {% elif status ==1 %}
+      <div id="username">&lt;{{ user_id }}&gt;</div>
+      <div id="logout-btn">
+        <button type="button" class="hover" onclick="sign_out()">
+          &lt;/Logout&gt;
+        </button>
+      </div>
+      {% endif %}
     </header>
     <div id="wrap">
       <div id="recruit-section">
