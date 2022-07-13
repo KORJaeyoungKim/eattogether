@@ -33,6 +33,23 @@
             box-sizing: border-box;
         }
 
+        #page-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        #page-logo img {
+            width: 70px;
+            height: 70px;
+            margin-right: 8px;
+        }
+
+        #page-logo #logo-title {
+            font-size: 3rem;
+            font-weight: 600;
+            color: #4b6587;
+        }
+
         body {
             background-color: #f0e5cf;
         }
@@ -57,6 +74,17 @@
             font-size: 3rem;
             font-weight: 600;
             color: #4b6587;
+        }
+
+        #logout-btn {
+            height: 80px;
+            color: #4b6587;
+            font-size: 2.6rem;
+            letter-spacing: 0.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 400;
         }
 
         #username {
@@ -95,6 +123,16 @@
         #recruit-section .input-group {
             height: 60px;
             margin-bottom: 20px;
+        }
+
+        #recruit-section .input-group input {
+            color: #4b6587;
+            font-size: 1.3rem;
+        }
+
+        #recruit-section .input-group input::placeholder {
+            color: #4b6587;
+            font-size: 1.3rem;
         }
 
         .form-control {
@@ -188,10 +226,12 @@
             width: 296px;
             height: 180px;
             border-radius: 6px 6px 0 0;
-            background-image: url("https://www.wikihow.com/images_en/thumb/5/5a/Bake-Chicken-Breast-Step-1-Version-4.jpg/550px-nowatermark-Bake-Chicken-Breast-Step-1-Version-4.jpg");
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
+        }
+
+        .container img {
+            width: 296px;
+            height: 180px;
+            border-radius: 6px 6px 0 0;
         }
 
         .container .place-name {
@@ -216,8 +256,12 @@
             font-size: 1.1rem;
             margin: 5px 5px 5px 0;
             padding: 4px;
+            padding-left: 10px;
             background-color: #c8c6c6;
             border-radius: 0 0 0 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
         }
 
         .bottom-container .people-stat {
@@ -265,7 +309,7 @@
         }
 
         .field {
-            background-color: #E2E2E2;
+            background-color: #e2e2e2;
             width: 700px;
             margin: auto;
             height: 100%;
@@ -279,219 +323,43 @@
 
     <script>
         $(document).ready(function () {
-            listing();
+            resetInput();
+            renderCard();
         });
 
-        function listing() {
+        function DataSend(idx) {
+            $("#detailCard").empty();
+            console.log('idx', idx)
             $.ajax({
                 type: "GET",
-                url: "/movie",
-                data: {},
+                url: "/DataSend",
+                data: {'index_give': idx},
                 success: function (response) {
-                    let movieRows = response.movies;
-                    $("#cards-box").empty();
-
-                    movieRows.forEach((element) => {
-                        let img = element.img;
-                        let title = element.title;
-                        let desc = element.desc;
-                        const star = "⭐";
-                        let rate = element.rate;
-                        let comment = element.comment;
-
-                        let cardHtml = `
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src=${img} class="card-img-top"/>
-                            <div class="card-body">
-                                <h5 class="card-title">${title}</h5>
-                                <p class="card-text">${desc}</p>
-                                <p>${star.repeat(parseInt(rate))}</p>
-                                <p class="mycomment">${comment}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                        $("#cards-box").append(cardHtml);
-                    });
-                },
-            });
-        }
-
-        function posting() {
-            let place = $("#url").val();
-
-            $.ajax({
-                type: "POST",
-                url: "/posts",
-                data: {
-                    place_give: place.replace(" ", "+"),
-                },
-                success: function (response) {
-                    console.log(response["msg"]);
-                    window.location.reload();
-                },
-            });
-        }
-
-        function open_box() {
-            $("#post-box").show();
-        }
-
-        function close_box() {
-            $("#post-box").hide();
-        }
-
-        //모임신청을 위한 버튼함수
-        function join() {
-            let number = '10'
-            $.ajax({
-                type: 'POST',
-                url: '/join',
-                data: {'number': number},
-                success: function (response) {
-                    alert(response['msg'])
-                    window.location.reload()
-                }
-            })
-        }
-    </script>
-</head>
-
-<body>
-<header>
-    <div id="page-logo">
-        <img src="" alt="logo"/>
-        <span id="logo-title"> 밥먹자 </span>
-    </div>
-    <div id="username">< username></div>
-</header>
-<div id="wrap">
-    <div id="recruit-section">
-        <div class="input-group">
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="제목"
-                    aria-label="title"
-            />
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="상호명"
-                    aria-label="place-name"
-            />
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="인원수"
-                    aria-label="people"
-            />
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="모임시간"
-                    aria-label="meet-time"
-            />
-        </div>
-        <button id="recruit-btn">인원 모집하기</button>
-    </div>
-    <div id="card-section">
-        <div class="row row-cols-3 row-cols-md-3">
-            <div class="col">
-                <div class="hover-layer" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <span class="hover-btn">신청하러 가기!</span>
-                </div>
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">오늘도 점심은 닭가슴살</h5>
-                        <div class="container">
-                            <div class="place-name">닭가슴살 전문점</div>
-                        </div>
-                        <div class="bottom-container">
-                            <p class="card-text">
-                                제주특별자치도 제주시 어딘가에 사는 중
-                            </p>
-                            <div class="people-stat">
-                                <img src="" alt="icon"/>
-                                3/4
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <div class="container">
-                            <img src="..." class="card-img-top" alt="..."/>
-                            <div class="title">상호명</div>
-                        </div>
-
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <div class="container">
-                            <img src="..." class="card-img-top" alt="..."/>
-                            <div class="title">상호명</div>
-                        </div>
-
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <div class="container">
-                            <img src="..." class="card-img-top" alt="..."/>
-                            <div class="title">상호명</div>
-                        </div>
-
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
+                    let info = response.cards;
+                    console.log('rows', info)
+                    let temp_html = `  <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">카드 상세보기</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" >
                 <div class="field">
-                    <img src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/4BYf/image/_pc0k6Jz3BHHLVwylaQYEPZdQd0.jfif"
-                         class="img-fluid" alt="...">
+                    <img
+                            src="${info.img}"
+                            class="img-fluid"
+                            alt="..."
+                    />
                     <div class="place">
-                        <h4 class="display-3">라화쿵부 서울직영점</h4>
+                        <h4 class="display-3">${info.place}</h4>
                     </div>
                     <h4 class="host">방장 : OOO(잔여 인원 : 00명)</h4>
                     <div class="guest">
                         {% for i in range(10) %}
-                            <div class="detailcard" style="width: 18rem;">
+                            <div class="detailcard" style="width: 18rem">
                                 <div class="card-body">
                                     <h5 class="card-title">신청자 : OOO</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">010-0000-0000</h6>
@@ -502,9 +370,190 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button onclick="join()" type="button" class="btn btn-primary">신청하기</button>
-            </div>
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button onclick="join(${info.index})" type="button" class="btn btn-primary">
+                    신청하기
+                </button>
+            </div>`
+                    $("#detailCard").append(temp_html);
+                },
+            });
+        }
+
+        function renderCard() {
+            $.ajax({
+                type: "GET",
+                url: "/posts",
+                data: {},
+                success: function (response) {
+                    let row = response.cards;
+                    console.log('row', row)
+                    row.forEach((element) => {
+                        let title = element.title;
+                        let img = element.img;
+                        let place = element.place;
+                        let people = element.people;
+                        let time = element.time;
+
+                        let cardHtml = `
+                <div class="col" onclick="DataSend(${element.index})">
+                  <div
+                    class="hover-layer"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  >
+                  <span class="hover-btn">신청하러 가기!</span>
+                  </div>
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <h5 class="card-title">${title}</h5>
+                      <div class="container">
+                        <img src='${img}' alt='가게사진' />
+                        <div class="place-name">${place}</div>
+                      </div>
+                      <div class="bottom-container">
+                        <p class="card-text">
+                          <span>모임시간</span>
+                          <span>${time}</span>
+                        </p>
+                        <div class="people-stat">
+                          <img src="" alt="icon" />
+                          3/${people}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              `;
+                        $(".row").append(cardHtml);
+                    });
+                },
+            });
+        }
+
+        function resetInput() {
+            for (i = 0; i <= 3; i++) {
+                let input = $(".input-group input")[i].value;
+                if (input != "") {
+                    $(".input-group input")[i].value = "";
+                } else if (input == "") {
+                    continue;
+                }
+            }
+        }
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/movie",
+                data: {},
+                success: function (response) {
+                },
+            });
+        }
+
+        function cardPosting() {
+            let title = $("#title-input").val();
+            let place = $("#place-input").val();
+            let people = $("#people-input").val();
+            let time = $("#time-input").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/posts",
+                data: {
+                    title_give: title,
+                    place_give: place,
+                    people_give: people,
+                    time_give: time,
+                },
+                success: function (response) {
+                    alert(response["msg"]);
+                    window.location.reload();
+                },
+            });
+        }
+
+        function close_card() {
+        }
+
+        //모임신청을 위한 버튼함수
+        function join(idxNum) {
+            $.ajax({
+                type: "POST",
+                url: "/join",
+                data: {number: idxNum},
+                success: function (response) {
+                    console.log(response["msg"])
+                    alert(response["msg"]);
+                    window.location.reload();
+                },
+            });
+        }
+    </script>
+</head>
+
+<body>
+<header>
+    <div id="page-logo">
+        <img src="../static/small-icon.png" alt="logo"/>
+        <span id="logo-title"> 밥먹자 </span>
+    </div>
+    <div id="logout-btn">＜/<span>Logout</span>＞</div>
+    <div id="username">＜<span>Login first</span>＞</div>
+</header>
+<div id="wrap">
+    <div id="recruit-section">
+        <div class="input-group">
+            <input
+                    type="text"
+                    class="form-control"
+                    placeholder="제목"
+                    aria-label="title"
+                    id="title-input"
+            />
+            <input
+                    type="text"
+                    class="form-control"
+                    placeholder="상호명"
+                    aria-label="place-name"
+                    id="place-input"
+            />
+            <input
+                    type="number"
+                    class="form-control"
+                    placeholder="인원수"
+                    aria-label="people"
+                    id="people-input"
+            />
+            <input
+                    type="text"
+                    class="form-control"
+                    placeholder="모임시간"
+                    aria-label="meet-time"
+                    id="time-input"
+            />
+        </div>
+        <button id="recruit-btn" onclick="cardPosting()">인원 모집하기</button>
+    </div>
+    <div id="card-section">
+        <div class="row row-cols-3 row-cols-md-3"></div>
+    </div>
+</div>
+<div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content" id="detailCard">
         </div>
     </div>
 </div>
