@@ -140,6 +140,15 @@
             color: #4b6587;
         }
 
+      .card-title {
+        color: #4b6587;
+        font-weight: 400;
+        font-size: 1.5rem;
+        letter-spacing: 0.1rem;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #4b6587;
+      }
+
         #recruit-btn {
             width: 500px;
             height: 60px;
@@ -198,6 +207,23 @@
             opacity: 0;
             transition: all 0.3s;
         }
+
+      .bottom-container p span {
+        font-size: 1.3rem;
+        letter-spacing: 0.2rem;
+      }
+
+      .bottom-container .people-stat {
+        width: 90px;
+        height: 90px;
+        margin-top: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        font-size: 1.5rem;
+        background-color: #c8c6c6;
+        border-radius: 0 0 6px 0;
+      }
 
         .col:hover .hover-layer {
             opacity: 1;
@@ -482,7 +508,12 @@
         function close_card() {
         }
 
-        //모임신청을 위한 버튼함수
+      function numberMaxLength(e) {
+        if (e.value.length > e.maxLength) {
+          e.value = e.value.slice(0, e.maxLength);
+        }
+      }
+     //모임신청을 위한 버튼함수
         function join(idxNum) {
             $.ajax({
                 type: "POST",
@@ -510,34 +541,36 @@
 <div id="wrap">
     <div id="recruit-section">
         <div class="input-group">
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="제목"
-                    aria-label="title"
-                    id="title-input"
-            />
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="상호명"
-                    aria-label="place-name"
-                    id="place-input"
-            />
-            <input
-                    type="number"
-                    class="form-control"
-                    placeholder="인원수"
-                    aria-label="people"
-                    id="people-input"
-            />
-            <input
-                    type="text"
-                    class="form-control"
-                    placeholder="모임시간"
-                    aria-label="meet-time"
-                    id="time-input"
-            />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="제목(최대12자)"
+            aria-label="title"
+            id="title-input"
+            maxlength="12"
+            oninput="numberMaxLength(this)"
+          />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="상호명"
+            aria-label="place-name"
+            id="place-input"
+          />
+          <input
+            type="number"
+            class="form-control"
+            placeholder="인원수"
+            aria-label="people"
+            id="people-input"
+          />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="모임시간"
+            aria-label="meet-time"
+            id="time-input"
+          />
         </div>
         <button id="recruit-btn" onclick="cardPosting()">인원 모집하기</button>
     </div>
