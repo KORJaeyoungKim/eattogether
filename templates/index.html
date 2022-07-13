@@ -14,6 +14,8 @@
       crossorigin="anonymous"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -351,6 +353,27 @@
           },
         });
       }
+        function sign_out(){
+          $.removeCookie('mytoken', { path: '/' });
+          alert('로그아웃!')
+          window.location.href = "/login"
+        }
+      //로그인, 로그아웃 toggle show hide
+      // 토큰 갖고 있으면 로그인 안보여, 안갖고 있으면 보여
+      {#function cookie_login(){#}
+      {#    if ()#}
+      {#}#}
+      {#$(document).ready(function () {#}
+      {#    $("#hide").click(function () {#}
+      {#        $("p").hide();#}
+      {#    });#}
+      {#    $("#show").click(function () {#}
+      {#        $("p").show();#}
+      {#    });#}
+      {#});#}
+</script>
+
+
     </script>
   </head>
 
@@ -360,8 +383,14 @@
         <img src="../static/small-icon.png" alt="logo" />
         <span id="logo-title"> 밥먹자 </span>
       </div>
-      <div id="logout-btn">＜/<span>Logout</span>＞</div>
-      <div id="username">＜<span>Login first</span>＞</div>
+      <div id="logout-btn">
+          <button onclick="sign_out()">Logout</button>
+      </div>
+
+      <div id="username" >
+          <button onclick=window.location.href='/signup'>Login first</button>
+      </div>
+
     </header>
     <div id="wrap">
       <div id="recruit-section">
