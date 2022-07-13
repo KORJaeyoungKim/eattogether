@@ -98,6 +98,27 @@ def movie_post():
 
     return jsonify({'msg': 'sucess'})
 
+@app.route('/login', methods=['POST'])
+def sign_up():
+    username_receive = request.form['username_give']
+    password_receive = request.form['password_give']
+    phone_receiver = request.form['phone_give']
+    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    doc = {
+        "id": username_receive,                               # 아이디
+        "pw": password_hash,                                  # 비밀번호
+        "phone": phone_receiver                            # 프로필 이름 기본값은 아이디
+
+    }
+    db.users.insert_one(doc)
+    return jsonify({'result': 'success'})
+
+@app.route('/login/check', methods=['POST'])
+def check_dup():
+    findusername_receive = request.form['username_give']
+    exists = bool(db.users.find_one({"username": findusername_receive}))
+    return jsonify({'result': 'success', 'exists': exists})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
