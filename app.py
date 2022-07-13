@@ -29,7 +29,6 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-
         return render_template('index.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -64,20 +63,32 @@ def sign_in():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
-    @app.route("/join", methods=["POST"])
-    def homework_post():
-        number_receive = request.form['number']
-        doc = {
-            'number': number_receive,
-        }
-        db.join.insert_one(doc)
+@app.route("/join", methods=["POST"])
+def people_join():
+    number_receive = request.form['number']
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
-        return jsonify({'msg': '신청 완료!'})
+    doc = {
+        'number': number_receive,
+        'id': payload['id']
+    }
+    db.join.insert_one(doc)
+
+    return jsonify({'msg': '신청 완료!'})
+
 
 @app.route("/posts", methods=["get"])
 def render_cards():
-    card_list = list(db.cards.find({}, {'_id':False}))
-    return jsonify({'cards':card_list})
+    card_list = list(db.cards.find({}, {'_id': False}))
+    return jsonify({'cards': card_list})
+
+
+@app.route("/DataSend", methods=["get"])
+def view_cards():
+    index_receice = request.args.get("index_give")
+    card_info = db.cards.find_one({'index': int(index_receice)}, {'_id': False})
+    return jsonify({'cards': card_info})
 
 
 @app.route("/posts", methods=["POST"])
@@ -87,14 +98,14 @@ def card_post():
     people_receive = request.form['people_give']
     time_receive = request.form['time_give']
     cardList_length = len(list(db.cards.find({}, {'_id': False})))
-    card_index = cardList_length+1
-
+    card_index = cardList_length + 1
 
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
     options.add_argument("--disable-gpu")
-    options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+    options.add_argument(
+        "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
     driver = webdriver.Chrome('chromedriver', options=options)
 
     driver.get("https://www.google.co.kr/imghp?hl=ko&tab=wi&authuser=0&ogbl")
@@ -110,14 +121,13 @@ def card_post():
         "src")
     driver.quit()
 
-    
     obj = {
-        'title':title_receive,
-        'img' : imgUrl,
-        'place':place_receive,
+        'title': title_receive,
+        'img': imgUrl,
+        'place': place_receive,
         'people': people_receive,
-        'time' : time_receive,
-        'index' : card_index
+        'time': time_receive,
+        'index': card_index
     }
     db.cards.insert_one(obj);
 
