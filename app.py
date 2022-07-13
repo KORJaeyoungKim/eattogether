@@ -26,7 +26,7 @@ SECRET_KEY = 'SPARTA'
 
 @app.route('/')
 def home():
-        return render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/signup')
 def signup():
@@ -36,7 +36,6 @@ def signup():
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
-
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -64,27 +63,47 @@ def people_join():
     number_receive = request.form['number']
     token_receive = request.cookies.get('mytoken')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-
-    doc = {
-        'number': number_receive,
-        'id': payload['id']
-    }
-    db.join.insert_one(doc)
-
-    return jsonify({'msg': '신청 완료!'})
+    check = bool(db.join.find_one({"number": number_receive,'id':payload['id']}))
+    host = db.cards.find_one({"index": int(number_receive)})['leaderId']
+    if check:
+        return jsonify({'msg': '이미 신청하셨습니다.'})
+    elif host == payload['id']:
+        return jsonify({'msg': '주최자는 신청할수 없습니다.'})
+    else:
+        doc = {
+            'number': number_receive,
+            'id': payload['id']
+        }
+        db.join.insert_one(doc)
+        return jsonify({'msg': '신청 완료!'})
 
 
 @app.route("/posts", methods=["get"])
 def render_cards():
     card_list = list(db.cards.find({}, {'_id': False}))
+    for el in card_list:
+        idx = str(el['index'])
+        guest_count = len(list(db.join.find({'number':idx}, {'_id': False})))
+        el['count'] = guest_count
     return jsonify({'cards': card_list})
 
 
 @app.route("/DataSend", methods=["get"])
 def view_cards():
+    token_receive = request.cookies.get('mytoken')
+    id = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])['id']
+    check = '';
     index_receice = request.args.get("index_give")
     card_info = db.cards.find_one({'index': int(index_receice)}, {'_id': False})
-    return jsonify({'cards': card_info})
+    if id == card_info['leaderId']:
+        check = 'true'
+    else:
+        check = 'false'
+    guest_count = list(db.join.find({'number':index_receice}, {'_id': False}))
+    guest_info = []
+    for info in guest_count:
+        guest_info.append(db.users.find_one({"id": info['id']},{'_id': False ,'pw': False}))
+    return jsonify({'cards': card_info, 'guest':guest_info, 'check':check})
 
 
 @app.route("/posts", methods=["POST"])
@@ -149,7 +168,6 @@ def check_dup():
     findusername_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": findusername_receive}))
     return jsonify({'result': 'success', 'exists': exists})
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
