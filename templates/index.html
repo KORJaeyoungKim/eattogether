@@ -78,7 +78,7 @@
         color: #4b6587;
       }
 
-      #logout-btn {
+      #logout-btn button {
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -87,9 +87,42 @@
         justify-content: center;
         align-items: center;
         font-weight: 400;
+        background-color: #f0e5cf;
+        border: none;
       }
 
-      #username {
+      #logout-btn button:hover {
+        -webkit-animation: tracking-in-expand 0.7s
+          cubic-bezier(0.215, 0.61, 0.355, 1) both;
+        animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1)
+          both;
+      }
+      @-webkit-keyframes tracking-in-expand {
+        0% {
+          letter-spacing: -0.6em;
+          opacity: 0;
+        }
+        40% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes tracking-in-expand {
+        0% {
+          letter-spacing: -0.5em;
+          opacity: 0;
+        }
+        40% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      #username button {
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -98,6 +131,8 @@
         justify-content: center;
         align-items: center;
         font-weight: 400;
+        background: none;
+        border: none;
       }
 
       #wrap {
@@ -565,9 +600,8 @@
             time_give: time,
           },
           success: function (response) {
-            $("#staticBackdrop .modal-body span")[0].value = response.msg;
-            console.log($("#staticBackdrop .modal-body span")[0].value);
-            window.location.reload();
+            $("#staticBackdrop .modal-body span")[0].textContent = response.msg;
+            setTimeout(() => window.location.reload(), 400);
           },
         });
       }
@@ -608,11 +642,15 @@
         <span id="logo-title"> 밥먹자 </span>
       </div>
       <div id="logout-btn">
-        <button onclick="sign_out()">Logout</button>
+        <button onclick="sign_out()">
+          <span>&lt;</span>/Logout<span>&gt;</span>
+        </button>
       </div>
 
       <div id="username">
-        <button onclick="window.location.href" ="/signup">Login first</button>
+        <button onclick="window.location.href='/signup'">
+          <span>&lt;</span>Login first<span>&gt;</span>
+        </button>
       </div>
     </header>
     <div id="wrap">
@@ -688,12 +726,6 @@
         </div>
       </div>
     </div>
-    <!-- <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button> -->
     <div
       class="modal fade"
       id="exampleModal"
