@@ -28,10 +28,13 @@ SECRET_KEY = 'SPARTA'
 def home():
     token_receive = request.cookies.get('mytoken')
     if token_receive is None:
-        status = 1
-        return render_template('index.html', status=status)
+        status = 0
+        user_id = None
+        return render_template('index.html', status=status, user_id=user_id)
     else:
-        return render_template('index.html', status=2)
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_id = payload['id']
+        return render_template('index.html', status=1, user_id=user_id)
 
 @app.route('/signup')
 def signup():

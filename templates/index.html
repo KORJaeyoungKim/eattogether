@@ -392,6 +392,20 @@
           transform: rotate(360deg);
         }
       }
+
+      {#로그아웃버튼 호버#}
+      .show-hover {
+          display: none;
+          font-weight: bolder;
+      }
+
+      .hover:hover .show-hover {
+          display: block;
+      }
+
+      .hover:hover .hidden-hover {
+          display: none;
+      }
     </style>
 
     <script>
@@ -609,13 +623,16 @@
         <span id="logo-title"> 밥먹자 </span>
       </div>
 
-        {% if status == 1 %}
+        {% if status == 0 %}
             <div id="username">
                 <button onclick="window.location.href='/signup'">Login first</button>
             </div>
-        {% elif status ==2 %}
+        {% elif status ==1 %}
             <div id="logout-btn">
-                <button onclick="sign_out()">Logout</button>
+                <button type="button" class="hover" onclick="sign_out()">
+                    <div class="hidden-hover">Logout</div>
+                    <div class="show-hover">{{ user_id }}</div>
+                </button>
             </div>
         {% endif %}
 
