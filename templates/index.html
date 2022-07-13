@@ -455,7 +455,6 @@ TimePicker */
         }
       }
 
-      {#로그아웃버튼 호버#}
       .show-hover {
           display: none;
           font-weight: bolder;
@@ -654,7 +653,7 @@ TimePicker */
       function sign_out() {
         $.removeCookie("mytoken", { path: "/" });
         alert("로그아웃!");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
 
       //모임신청을 위한 버튼함수
