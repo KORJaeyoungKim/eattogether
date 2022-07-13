@@ -103,11 +103,34 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
       }
       .joinbtn > button{
           margin-right: 20px;
-            margin-bottom: 30px;
+          margin-bottom: 30px;
+          background-color: transparent;
+
       }
+
+      #modal_back{
+          background-color: #f7f6f2;
+          border-radius: 30px;
+      }
+
+      button.btn:nth-child(1) { {#밖에 조인이랑 연결되어있음#}
+          height: 50px;
+          color: #4b6587;
+      }
+
+      #exampleModal .joinbtn button:hover {
+          color: white;
+          background: #4b6587;
+          border: 1px solid #4b6587;
+          transition: all 0.3s;
+      }
+
+
+
 
     </style>
     <script>
@@ -155,13 +178,28 @@
           let username = $("#join_id").val()
           let password = $("#join_pw").val()
           let phone = $("#join_phone").val()
+          let ok = false
           console.log(username, password, phone)
 
           if (username == "") {
               alert("아이디를 입력하세요!")
+              return;
+          }else if (!is_nickname(username)){
+              alert("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-15자 길이")
+              let obj = $('#join_id'); //클릭후 이상있으면  input 텍스트박스 리셋
+              for(let i=0;i<obj.length;i++){
+                  obj[i].value='';
+              }
+              return;
           }
-          if (username) {
-              {#let ok = true;#}
+
+          if (password == "") {
+                  alert("비밀번호를 입력해주세요")
+              return;
+              } else if (phone == "") {
+                  alert("휴대폰번호를 입력해주세요")
+              return;
+              }else if(true) {
               $.ajax({
                   type: "POST",
                   url: "/login/check",
@@ -172,21 +210,13 @@
                       console.log(response["exists"])
                       if (response["exists"]) {
                           alert("존재하는 아이디 입니다.")
+                          let obj = $('#join_id'); //클릭후 이상있으면  input 텍스트박스 리셋
+                          for (let i = 0; i < obj.length; i++) {
+                              obj[i].value = '';
+                          }
                           return;
                       } else {
-                          alert("가입 가능한 아이디 입니다.")
-                          {# ok = false;#}
-                      }
-                  }
-              });
-              {#    if (ok==true) return;
-          }#}
-              if (password == "") {
-                  alert("비밀번호를 입력해주세요")
-              } else if (phone == "") {
-                  alert("휴대폰번호를 입력해주세요")
-              } else {
-                  $.ajax({
+                          $.ajax({
                       type: "POST",
                       url: "/login",
                       data: {
@@ -199,10 +229,22 @@
                           window.location.replace("/login")
                       }
                   });
-              }
+                      }
+                  }
+              })
           }
+
       }
-            
+
+      function sign_close() {
+          window.location.replace("/login")
+      }
+
+      function is_nickname(asValue) {
+          let regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,15}$/;
+          console.log(regExp.test(asValue))
+          return regExp.test(asValue);
+      }
     </script>
   </head>
   <body>
@@ -262,7 +304,7 @@
       </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content" id="modal_back">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">회원가입</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -271,7 +313,7 @@
       <div class="modal-body">
 
           <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="join_id" placeholder="name@example.com" >
+              <input type="text" class="form-control" id="join_id" placeholder="글자수 15개제한" >
               <label for="floatingInput">ID</label>
           </div>
 
@@ -287,8 +329,8 @@
 
       </div>
 
-      <div class="joinbtn">
-        <button type="button" class="btn btn-outline-primary">뒤로가기</button> <!-- 버튼색상확인  -->
+      <div class="joinbtn" >
+        <button type="button" class="btn btn-secondary" onclick="sign_close()" >뒤로가기</button> <!-- 버튼색상확인  -->
         <button type="button" class="btn btn-secondary" onclick="sign_up()">가입하기!</button>
       </div>
     </div>
