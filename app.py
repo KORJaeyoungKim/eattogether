@@ -26,7 +26,12 @@ SECRET_KEY = 'SPARTA'
 
 @app.route('/')
 def home():
-        return render_template('index.html')
+    token_receive = request.cookies.get('mytoken')
+    if token_receive is None:
+        status = 1
+        return render_template('index.html', status=status)
+    else:
+        return render_template('index.html', status=2)
 
 @app.route('/signup')
 def signup():

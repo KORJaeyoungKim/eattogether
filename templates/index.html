@@ -598,6 +598,7 @@
           },
         });
       }
+
     </script>
   </head>
 
@@ -607,13 +608,17 @@
         <img src="../static/small-icon.png" alt="logo" />
         <span id="logo-title"> 밥먹자 </span>
       </div>
-      <div id="logout-btn">
-        <button onclick="sign_out()">Logout</button>
-      </div>
 
-      <div id="username">
-        <button onclick="window.location.href='/signup'">Login first</button>
-      </div>
+        {% if status == 1 %}
+            <div id="username">
+                <button onclick="window.location.href='/signup'">Login first</button>
+            </div>
+        {% elif status ==2 %}
+            <div id="logout-btn">
+                <button onclick="sign_out()">Logout</button>
+            </div>
+        {% endif %}
+
     </header>
     <div id="wrap">
       <div id="recruit-section">
