@@ -147,7 +147,7 @@ def sign_up():
 @app.route('/login/check', methods=['POST'])
 def check_dup():
     findusername_receive = request.form['username_give']
-    exists = bool(db.users.find_one({"username": findusername_receive}))
+    exists = bool(db.users.find_one({"id": findusername_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
 
