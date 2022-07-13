@@ -15,7 +15,11 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -71,14 +75,13 @@
         background-color: #f0e5cf;
         z-index: 1000;
       }
-
       #page-logo #logo-title {
         font-size: 3rem;
         font-weight: 600;
         color: #4b6587;
       }
 
-      #logout-btn {
+      #logout-btn button {
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -87,9 +90,42 @@
         justify-content: center;
         align-items: center;
         font-weight: 400;
+        background-color: #f0e5cf;
+        border: none;
       }
 
-      #username {
+      #logout-btn button:hover {
+        -webkit-animation: tracking-in-expand 0.8s
+          cubic-bezier(0.215, 0.61, 0.355, 1) both;
+        animation: tracking-in-expand 0.8s cubic-bezier(0.215, 0.61, 0.355, 1)
+          both;
+      }
+      @-webkit-keyframes tracking-in-expand {
+        0% {
+          letter-spacing: -0.6em;
+          opacity: 0;
+        }
+        40% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes tracking-in-expand {
+        0% {
+          letter-spacing: -0.5em;
+          opacity: 0;
+        }
+        40% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      #username button {
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -98,6 +134,8 @@
         justify-content: center;
         align-items: center;
         font-weight: 400;
+        background: none;
+        border: none;
       }
 
       #wrap {
@@ -146,6 +184,25 @@
         background-color: #f7f6f2;
         color: #4b6587;
       }
+      .ui-timepicker-container {
+        height: 155px !important;
+        background-color: #f7f6f2;
+      }
+      .ul-timepicker {
+        height: 155px;
+        background-color: #f7f6f2;
+      }
+      .ui-timepicker-viewport {
+        height: 155px;
+        background-color: #f7f6f2;
+      }
+      .ui-timepicker-viewport li a {
+        text-align: left;
+        font-size: 1.1rem;
+        color: #4b6587;
+      }
+      /* jQuery35107505279612393892
+TimePicker */
 
       .card-title {
         color: #4b6587;
@@ -210,7 +267,7 @@
         width: 100%;
         height: 100%;
         background-color: rgba(255, 255, 255, 0.6);
-        z-index: 999;
+        z-index: 800;
         opacity: 0;
         transition: all 0.3s;
       }
@@ -303,10 +360,15 @@
         margin-top: 5px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-evenly;
+        align-items: center;
         font-size: 1.5rem;
         background-color: #c8c6c6;
         border-radius: 0 0 6px 0;
+      }
+      .bottom-container .people-stat img {
+        width: 40px;
+        height: 40px;
       }
 
       .img-fluid {
@@ -414,6 +476,9 @@
         renderCard();
       });
 
+      $("#page-logo").click(function () {
+        window.location.reload();
+      });
       function DataSend(idx) {
         $("#detailCard").empty();
         console.log("idx", idx);
@@ -509,7 +574,7 @@
                           <span>${time}</span>
                         </p>
                         <div class="people-stat">
-                          <img src="" alt="icon" />
+                          <img src="../static/group-icon.png" alt="icon" />
                           3/${people}
                         </div>
                       </div>
@@ -579,9 +644,8 @@
             time_give: time,
           },
           success: function (response) {
-            $("#staticBackdrop .modal-body span")[0].value = response.msg;
-            console.log($("#staticBackdrop .modal-body span")[0].value);
-            window.location.reload();
+            $("#staticBackdrop .modal-body span")[0].textContent = response.msg;
+            setTimeout(() => window.location.reload(), 400);
           },
         });
       }
@@ -613,6 +677,20 @@
         });
       }
 
+      //timepicker 전용 함수
+      $(function () {
+        $(".timepicker").timepicker({
+          timeFormat: "hh:mm p",
+          interval: 30,
+          minTime: "06:00",
+          maxTime: "11:30pm",
+          defaultTime: "11",
+          startTime: "00:00",
+          dynamic: false,
+          dropdown: true,
+          scrollbar: true,
+        });
+      });
     </script>
   </head>
 
@@ -622,7 +700,6 @@
         <img src="../static/small-icon.png" alt="logo" />
         <span id="logo-title"> 밥먹자 </span>
       </div>
-
         {% if status == 0 %}
             <div id="username">
                 <button onclick="window.location.href='/signup'">Login first</button>
@@ -635,7 +712,6 @@
                 </button>
             </div>
         {% endif %}
-
     </header>
     <div id="wrap">
       <div id="recruit-section">
@@ -661,13 +737,14 @@
           <input
             type="number"
             class="form-control"
-            placeholder="인원수"
+            placeholder="인원수(1 이상)"
             aria-label="people"
             id="people-input"
+            min="1"
+            oninput="this.value = this.value.replace(/[^1-9.]/g, '').replace(/(\..*)\./g, '$1');"
           />
           <input
-            type="text"
-            class="form-control"
+            class="timepicker form-control"
             placeholder="모임시간"
             aria-label="meet-time"
             id="time-input"
@@ -710,12 +787,6 @@
         </div>
       </div>
     </div>
-    <!-- <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button> -->
     <div
       class="modal fade"
       id="exampleModal"
