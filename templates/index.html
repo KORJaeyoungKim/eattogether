@@ -136,7 +136,12 @@
         color: #4b6587;
         font-size: 1.3rem;
       }
-
+      #warningMsg {
+        font-size: 1.2rem;
+        letter-spacing: 0.1rem;
+        color: #eb4747;
+        padding-bottom: 8px;
+      }
       .form-control {
         background-color: #f7f6f2;
         color: #4b6587;
@@ -347,6 +352,46 @@
         margin: 5px;
         border: 1px solid black;
       }
+
+      /* 로딩모달창 관련 스타일 */
+      #staticBackdrop .modal-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+      #staticBackdrop .btn-close {
+        display: none;
+      }
+      .loader {
+        border: 10px solid #f7f6f2;
+        border-radius: 50%;
+        border-top: 10px solid #4b6587;
+        width: 60px;
+        height: 60px;
+        -webkit-animation: spin 1.5s ease infinite; /* Safari */
+        animation: spin 1.5s ease infinite;
+        margin-bottom: 10px;
+      }
+
+      /* Safari */
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
 
     <script>
@@ -421,7 +466,6 @@
           data: {},
           success: function (response) {
             let row = response.cards;
-            console.log("row", row);
             row.forEach((element) => {
               let title = element.title;
               let img = element.img;
@@ -489,7 +533,28 @@
         let place = $("#place-input").val();
         let people = $("#people-input").val();
         let time = $("#time-input").val();
+        let userToken = document.cookie;
+        if (title == "" || place == "" || people == "" || time == "") {
+          if ($("#warningMsg")[0] == undefined) {
+            setTimeout(function () {
+              let warningMsg = document.createElement("span");
+              warningMsg.appendChild(
+                document.createTextNode("모임 정보를 모두 입력해주세요!")
+              );
+              $("#recruit-section")[0].insertBefore(
+                warningMsg,
+                $("#recruit-btn")[0]
+              );
+              $("#recruit-section > span")[0].setAttribute("id", "warningMsg");
+            }, 600);
+          }
 
+          setTimeout(function () {
+            console.log("Executed after 1 second");
+            $("#staticBackdrop .btn-close").trigger("click");
+          }, 500);
+          return;
+        }
         $.ajax({
           type: "POST",
           url: "/posts",
@@ -500,7 +565,8 @@
             time_give: time,
           },
           success: function (response) {
-            alert(response["msg"]);
+            $("#staticBackdrop .modal-body span")[0].value = response.msg;
+            console.log($("#staticBackdrop .modal-body span")[0].value);
             window.location.reload();
           },
         });
@@ -564,9 +630,11 @@
           <input
             type="text"
             class="form-control"
-            placeholder="상호명"
+            placeholder="상호명(최대15자)"
             aria-label="place-name"
             id="place-input"
+            maxlength="15"
+            oninput="numberMaxLength(this)"
           />
           <input
             type="number"
@@ -583,12 +651,49 @@
             id="time-input"
           />
         </div>
-        <button id="recruit-btn" onclick="cardPosting()">인원 모집하기</button>
+        <button
+          id="recruit-btn"
+          onclick="cardPosting()"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+        >
+          인원 모집하기
+        </button>
       </div>
       <div id="card-section">
         <div class="row row-cols-3 row-cols-md-3"></div>
       </div>
     </div>
+    <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-sm">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="loader"></div>
+            <span>잠시만 기다려주세요!</span>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button> -->
     <div
       class="modal fade"
       id="exampleModal"

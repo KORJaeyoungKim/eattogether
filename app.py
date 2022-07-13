@@ -89,13 +89,21 @@ def view_cards():
 
 @app.route("/posts", methods=["POST"])
 def card_post():
+    #모임등록시 입력한 정보들을 받아오는 부분
     title_receive = request.form['title_give']
     place_receive = request.form['place_give']
     people_receive = request.form['people_give']
     time_receive = request.form['time_give']
+
+    #모임 등록한 사람의 token값을 가져와서 ID를 꺼내오는 부분
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+    #각 카드별 index저장을 위한 코드
     cardList_length = len(list(db.cards.find({}, {'_id': False})))
     card_index = cardList_length + 1
 
+    #<--이미지 크롤링 코드 시작 -->
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
@@ -116,6 +124,7 @@ def card_post():
                                  '/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img').get_attribute(
         "src")
     driver.quit()
+    #<--이미지 크롤링 코드 끝-->
 
     obj = {
         'title': title_receive,
@@ -123,11 +132,12 @@ def card_post():
         'place': place_receive,
         'people': people_receive,
         'time': time_receive,
-        'index': card_index
+        'index': card_index,
+        'leaderId' : payload['id']
     }
     db.cards.insert_one(obj);
 
-    return jsonify({'msg': 'sucess'})
+    return jsonify({'msg': '로딩 성공!'})
 
 @app.route('/login', methods=['POST'])
 def sign_up():
