@@ -1,3 +1,6 @@
+from ast import IsNot
+from lib2to3.pgen2 import token
+from jinja2 import Undefined
 from pymongo import MongoClient
 
 client = MongoClient('mongodb+srv://test:sparta@cluster0.0wupi.mongodb.net/Cluster0?retryWrites=true&w=majority')
@@ -27,6 +30,7 @@ SECRET_KEY = 'SPARTA'
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
+    
     if token_receive is None:
         status = 0
         user_id = None
@@ -52,7 +56,7 @@ def sign_in():
     pw_receive = request.form['pw_give']
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
+    result = db.users.find_one({'id': id_receive, 'pw': pw_hash}, {'_id': False})
 
     if result is not None:
         payload = {
@@ -60,6 +64,8 @@ def sign_in():
             # 'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        #token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        #ec2 서버에서 json이 안날아가는 오류 수정하기위해 decode['utf-8] 붙여야함
 
         return jsonify({'result': 'success', 'token': token})
     # 찾지 못하면
@@ -99,18 +105,25 @@ def render_cards():
 @app.route("/DataSend", methods=["get"])
 def view_cards():
     token_receive = request.cookies.get('mytoken')
-    id = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])['id']
-    check = '';
     index_receice = request.args.get("index_give")
     card_info = db.cards.find_one({'index': int(index_receice)}, {'_id': False})
-    if id == card_info['leaderId']:
-        check = 'true'
+    guest_count = list(db.join.find({'number':index_receice}, {'_id': False}))
+    check = '';
+
+    print(token_receive)
+    if token_receive is not None:
+        id = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])['id']
+        if id == card_info['leaderId']:
+            check = 'true'
+        else:
+            check = 'false'
     else:
         check = 'false'
-    guest_count = list(db.join.find({'number':index_receice}, {'_id': False}))
+        
     guest_info = []
     for info in guest_count:
         guest_info.append(db.users.find_one({"id": info['id']},{'_id': False ,'pw': False}))
+   
     return jsonify({'cards': card_info, 'guest':guest_info, 'check':check})
 
 
@@ -138,7 +151,8 @@ def card_post():
     options.add_argument(
         "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
     driver = webdriver.Chrome('chromedriver', options=options)
-
+    #driver = webdriver.Chrome(executable_path='/home/ubuntu/eattogether/chromedriver', options=options)
+    #ec2에서 크롬드라이버 경로를 잡지 못해서 절대경로를 사용해서 chromedriver 잡아줘야함
     driver.get("https://www.google.co.kr/imghp?hl=ko&tab=wi&authuser=0&ogbl")
     elem = driver.find_element(By.NAME, "q")  # 구글 검색창 선택
     elem.send_keys(place_receive)  # 검색창에 검색할 내용(name)넣기
