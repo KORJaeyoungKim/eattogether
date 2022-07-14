@@ -178,10 +178,9 @@
           let username = $("#join_id").val()
           let password = $("#join_pw").val()
           let phone = $("#join_phone").val()
-          let ok = false
-          console.log(username, password, phone)
+          let ok = false;
 
-          if (username == "") {
+          if (username == "" ) {
               alert("아이디를 입력하세요!")
               return;
           }else if (!is_nickname(username)){

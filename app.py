@@ -26,7 +26,7 @@ SECRET_KEY = 'SPARTA'
 
 @app.route('/')
 def home():
-    token_receive = request.cookies.get('mytoken')
+    token_receive = request.cookies.get('mytoken');
     if token_receive is None:
         status = 0
         user_id = None
@@ -52,7 +52,7 @@ def sign_in():
     pw_receive = request.form['pw_give']
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
+    result = db.users.find_one({'id': id_receive, 'pw': pw_hash}, {'_id': False})
 
     if result is not None:
         payload = {
@@ -100,7 +100,6 @@ def render_cards():
 def view_cards():
     token_receive = request.cookies.get('mytoken')
     id = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])['id']
-    check = '';
     index_receice = request.args.get("index_give")
     card_info = db.cards.find_one({'index': int(index_receice)}, {'_id': False})
     if id == card_info['leaderId']:
