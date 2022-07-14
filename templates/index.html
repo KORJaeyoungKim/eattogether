@@ -6,6 +6,13 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <meta property="og:title" content="밥먹자!"/>
+    <meta property="og:description" content='맛있는건 같이 먹으면 더 맛있다!'/>
+    <meta
+            property="og:image"
+            content='../static/Logo-icon.png'
+    />
+    <link rel="icon" href="../static/fabicon.png">
 
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -26,7 +33,7 @@
             crossorigin="anonymous"
     ></script>
 
-    <title>스파르타 피디아</title>
+    <title>다같이-밥먹자!</title>
 
     <link
             href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap"
@@ -37,11 +44,19 @@
         * {
             font-family: "Gowun Dodum", sans-serif;
             box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
         }
 
         #page-logo {
             display: flex;
             align-items: center;
+            cursor: pointer;
         }
 
         #page-logo img {
@@ -73,6 +88,7 @@
             max-width: 1200px;
             border-bottom: 8px double #4b6587;
             background-color: #f0e5cf;
+
             z-index: 1000;
         }
 
@@ -80,14 +96,16 @@
             font-size: 3rem;
             font-weight: 600;
             color: #4b6587;
+
         }
 
         #logout-btn {
             width: 234px;
             position: absolute;
             top: 5px;
-            left: 950px;
+            right: 10px;
             z-index: 100;
+            cursor: pointer;
         }
 
         #logout-btn button {
@@ -104,6 +122,35 @@
             border: none;
             z-index: 101;
             opacity: 0;
+            -webkit-animation: tracking-in-shrink 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) reverse both;
+            animation: tracking-in-shrink 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) reverse both;
+
+        }
+
+        @-webkit-keyframes tracking-in-shrink {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+            40% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes tracking-in-shrink {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+            40% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         #logout-btn button:hover {
@@ -126,7 +173,7 @@
 
         @keyframes tracking-in-expand {
             0% {
-                letter-spacing: -0.5em;
+                letter-spacing: -0.6em;
                 opacity: 0;
             }
             40% {
@@ -148,6 +195,85 @@
             font-weight: 400;
             background: none;
             border: none;
+            cursor: pointer;
+        }
+
+        #username button {
+            height: 80px;
+            color: #4b6587;
+            font-size: 2.6rem;
+            letter-spacing: 0.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 400;
+            background: none;
+            border: none;
+        }
+
+        .wobble-hor-bottom {
+            -webkit-animation: wobble-hor-bottom 0.8s both;
+            animation: wobble-hor-bottom 0.8s both;
+        }
+
+        @-webkit-keyframes wobble-hor-bottom {
+            0%,
+            100% {
+                -webkit-transform: translateX(0%);
+                transform: translateX(0%);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+            }
+            15% {
+                -webkit-transform: translateX(-30px) rotate(-6deg);
+                transform: translateX(-30px) rotate(-6deg);
+            }
+            30% {
+                -webkit-transform: translateX(15px) rotate(6deg);
+                transform: translateX(15px) rotate(6deg);
+            }
+            45% {
+                -webkit-transform: translateX(-15px) rotate(-3.6deg);
+                transform: translateX(-15px) rotate(-3.6deg);
+            }
+            60% {
+                -webkit-transform: translateX(9px) rotate(2.4deg);
+                transform: translateX(9px) rotate(2.4deg);
+            }
+            75% {
+                -webkit-transform: translateX(-6px) rotate(-1.2deg);
+                transform: translateX(-6px) rotate(-1.2deg);
+            }
+        }
+
+        @keyframes wobble-hor-bottom {
+            0%,
+            100% {
+                -webkit-transform: translateX(0%);
+                transform: translateX(0%);
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+            }
+            15% {
+                -webkit-transform: translateX(-30px) rotate(-6deg);
+                transform: translateX(-30px) rotate(-6deg);
+            }
+            30% {
+                -webkit-transform: translateX(15px) rotate(6deg);
+                transform: translateX(15px) rotate(6deg);
+            }
+            45% {
+                -webkit-transform: translateX(-15px) rotate(-3.6deg);
+                transform: translateX(-15px) rotate(-3.6deg);
+            }
+            60% {
+                -webkit-transform: translateX(9px) rotate(2.4deg);
+                transform: translateX(9px) rotate(2.4deg);
+            }
+            75% {
+                -webkit-transform: translateX(-6px) rotate(-1.2deg);
+                transform: translateX(-6px) rotate(-1.2deg);
+            }
         }
 
         #wrap {
@@ -161,7 +287,7 @@
         }
 
         #recruit-section {
-            margin: 25px 0 20px 0;
+            margin: 17px 0 17px 0;
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
@@ -169,12 +295,12 @@
             max-width: 95%;
             width: 1030px;
             min-width: 1030px;
-            height: 200px;
+            height: 220px;
         }
 
         #recruit-section .input-group {
             height: 60px;
-            margin-bottom: 20px;
+            margin-bottom: 31px;
         }
 
         #recruit-section .input-group input {
@@ -188,6 +314,8 @@
         }
 
         #warningMsg {
+            position: absolute;
+            top: 210px;
             font-size: 1.2rem;
             letter-spacing: 0.1rem;
             color: #eb4747;
@@ -239,6 +367,10 @@
             border: 5px solid #f7f6f2;
             box-shadow: 0 0 0 6px #4b6587;
             border-radius: 5px;
+        }
+
+        #recruit-btn:active {
+            transform: scale(0.98);
         }
 
         #card-section {
@@ -309,7 +441,7 @@
             opacity: 1;
         }
 
-        .hover-btn {
+        .hover-layer .hover-btn {
             width: 296px;
             color: #f7f6f2;
             background-color: #4b6587;
@@ -324,6 +456,8 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
             text-align: center;
+            cursor: pointer;
+            z-index: 300;
         }
 
         .container {
@@ -385,12 +519,40 @@
 
         .bottom-container .people-stat img {
             width: 40px;
-            height: 40px;
+        }
+
+        .modal-dialog-scrollable {
+            height: 891px;
+        }
+
+        #exampleModal .modal-dialog {
+            max-width: 751px;
+            width: 891px;
+        }
+
+        #detailCard {
+            height: 100%;
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        #detailCard .modal-body {
+            border-bottom: none;
+            background-color: #f0e5cf;
+            padding: 21px 16px 10.5px 16px;
+        }
+
+        #detailCard .field {
+            border-radius: 10px;
+            width: 700px;
+            margin: auto;
+            height: 100%;
         }
 
         .img-fluid {
             height: 400px;
             width: 100%;
+            border-radius: 10px 10px 0 0;
         }
 
         .place {
@@ -405,31 +567,67 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            color: #4b6587;
+            letter-spacing: 0.1rem;
             height: 80px;
-            background-color: white;
-            width: 90%;
+            background-color: #f0e5cf;
+            width: 100%;
         }
 
-        .host {
-            padding-left: 50px;
+        .content-section {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content-section .left-side {
+            background-color: #f7f6f2;
+            width: 340px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: flex-start;
+            border-radius: 0 0 0 10px;
+            padding: 15px 0 15px 15px;
+        }
+
+        .content-section .left-side .host {
+            font-size: 1.7rem;
+        }
+
+        .content-section .left-side .host span {
+            font-size: 2.5rem;
+            letter-spacing: 0.17rem;
+            color: #4b6587;
+        }
+
+        .content-section .left-side .people-count {
+            line-height: 2rem;
+            font-size: 1.7rem;
+            letter-spacing: 0.2rem;
+        }
+
+        .content-section .left-side .time {
+            font-size: 1.7rem;
+            letter-spacing: 0.2rem;
+            line-height: 2rem;
+        }
+
+        .content-section .left-side .people-count span {
+            font-size: 3rem;
+            color: #4b6587;
         }
 
         .guest {
+            background-color: #f7f6f2;
+            padding: 0 11px;
+            width: 340px;
+            height: 280px;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            overflow-y: scroll;
             justify-content: space-evenly;
-        }
-
-        .field {
-            background-color: #e2e2e2;
-            width: 700px;
-            margin: auto;
-            height: 100%;
-        }
-
-        .detailcard {
-            margin: 5px;
-            border: 1px solid black;
+            border-radius: 0 0 10px 0;
         }
 
         /* 로딩모달창 관련 스타일 */
@@ -444,6 +642,49 @@
             display: none;
         }
 
+        #detailCard .modal-footer {
+            border-top: none;
+            background-color: #f0e5cf;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10.5px 16px 21px 16px;
+        }
+
+        .modal-footer button:nth-child(1) {
+            background-color: #c8c6c6;
+            border: none;
+            font-size: 1.3rem;
+            color: black;
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .modal-footer button:nth-child(1):hover {
+            background-color: #a3a3a3;
+        }
+
+        .modal-footer button:nth-child(1):active {
+            transform: scale(0.98);
+        }
+
+        .modal-footer button:nth-child(2) {
+            background-color: #4b6587;
+            border: none;
+            font-size: 1.3rem;
+            width: 100px;
+            margin-left: 10px;
+        }
+
+        .modal-footer button:nth-child(2):hover {
+            background-color: #344f72;
+        }
+
+        .modal-footer button:nth-child(2):active {
+            transform: scale(0.98);
+        }
+
+        /*아래는 로딩 모달창 관련 스타일입니다*/
         .loader {
             border: 10px solid #f7f6f2;
             border-radius: 50%;
@@ -487,14 +728,10 @@
             display: none;
         }
     </style>
+
     <script>
         $(document).ready(function () {
             resetInput();
-            renderCard();
-        });
-
-        $("#page-logo").click(function () {
-            window.location.reload();
         });
 
         function DataSend(idx) {
@@ -506,15 +743,7 @@
                 success: function (response) {
                     let info = response.cards;
                     let guest_info = response.guest;
-                    let temp_html = `  <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">카드 상세보기</h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
-            </div>
+                    let temp_html = `
             <div class="modal-body" >
                 <div class="field">
                     <img
@@ -525,94 +754,102 @@
                     <div class="place">
                         <h4 class="display-3">${info.place}</h4>
                     </div>
-                    <h4 class="host">방장 : ${info.leaderId}(잔여 인원 : ${
+                    <div class='content-section'>
+                      <div class='left-side'>
+                      <h3 class="host">방장 : <span>${info.leaderId}</span></h3>
+                      <h4 class='time'>${info.time}</h4>
+                      <h4 class='people-count'>
+                        남은 자리 <span>${
                         info.people - guest_info.length
-                    }명)</h4>
+                    }</span>명
+                      </h4>
+                      </div>
+
                     <div class="guest">`;
                     for (let el of guest_info) {
                         let phoneNumber = el["phone"];
                         if (response.check === "false") phoneNumber = "010-****-****";
                         temp_html += `<div class="detailcard" style="width: 18rem">
-                                <div class="card-body">
-                                    <h5 class="card-title">신청자 : ${el["id"]}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">${phoneNumber}</h6>
-                                </div>
-                            </div>`;
+                                          <div class="card-body">
+                                              <h5 class="card-title">신청자 : ${el["id"]}</h5>
+                                              <h6 class="card-subtitle mb-2 text-muted">${phoneNumber}</h6>
+                                          </div>
+                                      </div>`;
                     }
 
                     temp_html += `</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-                <button onclick="join(${info.index},${
+                        </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button onclick="join(${info.index},${
                         info.people - guest_info.length
                     })" type="button" class="btn btn-primary">
-                    신청하기
-                </button>
-            </div>`;
+                          신청하기
+                        </button>
+                     </div>`;
                     $("#detailCard").append(temp_html);
                 },
             });
         }
 
-        function renderCard() {
-            $.ajax({
-                type: "GET",
-                url: "/posts",
-                data: {},
-                success: function (response) {
-                    let row = response.cards;
-                    row.forEach((element) => {
-                        let title = element.title;
-                        let img = element.img;
-                        let place = element.place;
-                        let people = element.people;
-                        let time = element.time;
-                        let count = element.count;
+        //jinja2를 이용하여 카드를 붙여넣어서 필요없어짐.
+        // function renderCard() {
+        //   $.ajax({
+        //     type: "GET",
+        //     url: "/posts",
+        //     data: {},
+        //     success: function (response) {
+        //       let row = response.cards;
+        //       row.forEach((element) => {
+        //         let title = element.title;
+        //         let img = element.img;
+        //         let place = element.place;
+        //         let people = element.people;
+        //         let time = element.time;
+        //         let count = element.count;
 
-                        let cardHtml = `
-                <div class="col" >
-                  <div
-                    class="hover-layer"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                    onclick="DataSend()"
-                  >
-                 
-                  <span class="hover-btn">신청하러 가기!</span>
-                  </div>
-                  <div class="card text-center">
-                    <div class="card-body">
-                      <h5 class="card-title">${title}</h5>
-                      <div class="container">
-                        <img src='${img}' alt='가게사진' />
-                        <div class="place-name">${place}</div>
-                      </div>
-                      <div class="bottom-container">
-                        <p class="card-text">
-                          <span>모임시간</span>
-                          <span>${time}</span>
-                        </p>
-                        <div class="people-stat">
-                          <img src="../static/group-icon.png" alt="icon" />
-                          ${count}/${people}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              `;
-                        $(".row").append(cardHtml);
-                    });
-                },
-            });
-        }
+        //         let cardHtml = `
+        //           <div class="col" onclick="DataSend(${element.index})">
+        //             <div
+        //               class="hover-layer"
+        //               data-bs-toggle="modal"
+        //               data-bs-target="#exampleModal"
+        //             >
+        //             <span class="hover-btn">신청하러 가기!</span>
+        //             </div>
+        //             <div class="card text-center">
+        //               <div class="card-body">
+        //                 <h5 class="card-title">${title}</h5>
+        //                 <div class="container">
+        //                   <img src='${img}' alt='가게사진' />
+        //                   <div class="place-name">${place}</div>
+        //                 </div>
+        //                 <div class="bottom-container">
+        //                   <p class="card-text">
+        //                     <span>모임시간</span>
+        //                     <span>${time}</span>
+        //                   </p>
+        //                   <div class="people-stat">
+        //                     <img src="../static/group-icon.png" alt="icon" />
+        //                     ${count}/${people}
+        //                   </div>
+        //                 </div>
+        //               </div>
+        //             </div>
+        //         `;
+        //         $(".row").append(cardHtml);
+        //       });
+        //     },
+        //   });
+        // }
 
         function resetInput() {
             for (i = 0; i <= 3; i++) {
@@ -625,29 +862,40 @@
             }
         }
 
+        $('#page-logo').on({
+            click: function () {
+                console.log('done')
+                window.location.reload();
+            }
+        })
+
         function cardPosting() {
             let title = $("#title-input").val();
             let place = $("#place-input").val();
             let people = $("#people-input").val();
             let time = $("#time-input").val();
             let userToken = document.cookie;
-            if (title == "" || place == "" || people == "" || time == "") {
-                if ($("#warningMsg")[0] == undefined) {
-                    setTimeout(function () {
-                        let warningMsg = document.createElement("span");
-                        warningMsg.appendChild(
-                            document.createTextNode("모임 정보를 모두 입력해주세요!")
-                        );
-                        $("#recruit-section")[0].insertBefore(
-                            warningMsg,
-                            $("#recruit-btn")[0]
-                        );
-                        $("#recruit-section > span")[0].setAttribute("id", "warningMsg");
-                    }, 600);
-                }
+
+            if (userToken == '') {
+                setTimeout(function () {
+                    $('#warningMsg')[0].innerText = '로그인이 필요한 서비스입니다.'
+                }, 600);
 
                 setTimeout(function () {
-                    console.log("Executed after 1 second");
+                    $("#staticBackdrop .btn-close").trigger("click");
+                    $('#username').removeClass('wobble-hor-bottom')
+                    setTimeout(() => {
+                        $('#username').addClass('wobble-hor-bottom')
+                    }, 100);
+                }, 500);
+                return;
+            }
+            if (title == "" || place == "" || people == "" || time == "") {
+                setTimeout(function () {
+                    $('#warningMsg')[0].innerText = '필수정보를 모두 입력해주세요!'
+                }, 600);
+
+                setTimeout(function () {
                     $("#staticBackdrop .btn-close").trigger("click");
                 }, 500);
                 return;
@@ -668,8 +916,6 @@
             });
         }
 
-        function close_card() {
-        }
 
         function numberMaxLength(e) {
             if (e.value.length > e.maxLength) {
@@ -724,7 +970,7 @@
 
 <body>
 <header>
-    <div id="page-logo">
+    <div id="page-logo" onclick="window.location.reload()">
         <img src="../static/small-icon.png" alt="logo"/>
         <span id="logo-title"> 밥먹자 </span>
     </div>
@@ -780,6 +1026,7 @@
                     id="time-input"
             />
         </div>
+        <span id="warningMsg"></span>
         <button
                 id="recruit-btn"
                 onclick="cardPosting()"
@@ -790,43 +1037,76 @@
         </button>
     </div>
     <div id="card-section">
-        <div class="row row-cols-3 row-cols-md-3"></div>
+        <div class="row row-cols-3 row-cols-md-3">
+            {% for card in cards %}
+                {% set click_event = 'onclick=DataSend('~card.index~')' %}
+                <div class="col">
+                    <div
+                            class="hover-layer"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            {{ click_event }}
+                    >
+                        <span class="hover-btn">신청하러 가기!</span>
+                    </div>
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ card.title }}</h5>
+                            <div class="container">
+                                <img src={{ card.img }} alt='가게사진'/>
+                                <div class="place-name">{{ card.place }}</div>
+                            </div>
+                            <div class="bottom-container">
+                                <p class="card-text">
+                                    <span>모임시간</span>
+                                    <span>{{ card.time }}</span>
+                                </p>
+                                <div class="people-stat">
+                                    <img src="../static/group-icon.png" alt="icon"/>
+                                    {{ card.count }}/{{ card.people }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
     </div>
-</div>
-<div
-        class="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog modal-dialog-centered modal-dialog-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="loader"></div>
-                <span>잠시만 기다려주세요!</span>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
+    <div
+            class="modal fade"
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="loader"></div>
+                    <span>잠시만 기다려주세요!</span>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content" id="detailCard"></div>
+    <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content" id="detailCard"></div>
+        </div>
     </div>
-</div>
 </body>
 </html>
