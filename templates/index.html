@@ -84,7 +84,7 @@
         width: 234px;
         position: absolute;
         top: 5px;
-        left: 950px;
+        right: 10px;
         z-index: 100;
       }
       #logout-btn button {
@@ -135,6 +135,19 @@
       }
 
       #username {
+        height: 80px;
+        color: #4b6587;
+        font-size: 2.6rem;
+        letter-spacing: 0.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 400;
+        background: none;
+        border: none;
+      }
+
+      #username button {
         height: 80px;
         color: #4b6587;
         font-size: 2.6rem;
@@ -230,6 +243,10 @@
         border: 5px solid #f7f6f2;
         box-shadow: 0 0 0 6px #4b6587;
         border-radius: 5px;
+      }
+
+      #recruit-btn:active {
+        transform: scale(0.98);
       }
 
       #card-section {
@@ -375,12 +392,36 @@
       }
       .bottom-container .people-stat img {
         width: 40px;
-        height: 40px;
+      }
+      .modal-dialog-scrollable {
+        height: 891px;
+      }
+      #exampleModal .modal-dialog {
+        max-width: 751px;
+        width: 891px;
+      }
+      #detailCard {
+        height: 100%;
+        width: 100%;
+        border-radius: 15px;
       }
 
+      #detailCard .modal-body {
+        border-bottom: none;
+        background-color: #f0e5cf;
+        padding: 21px 16px 10.5px 16px;
+      }
+
+      #detailCard .field {
+        border-radius: 10px;
+        width: 700px;
+        margin: auto;
+        height: 100%;
+      }
       .img-fluid {
         height: 400px;
         width: 100%;
+        border-radius: 10px 10px 0 0;
       }
 
       .place {
@@ -395,31 +436,60 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        color: #4b6587;
+        letter-spacing: 0.1rem;
         height: 80px;
-        background-color: white;
-        width: 90%;
+        background-color: #f0e5cf;
+        width: 100%;
       }
-
-      .host {
-        padding-left: 50px;
-      }
-
-      .guest {
+      .content-section {
         display: flex;
-        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .content-section .left-side {
+        background-color: #f7f6f2;
+        width: 340px;
+        height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-start;
+        border-radius: 0 0 0 10px;
+        padding: 15px 0 15px 15px;
+      }
+      .content-section .left-side .host {
+        font-size: 1.7rem;
+      }
+      .content-section .left-side .host span {
+        font-size: 2.5rem;
+        letter-spacing: 0.17rem;
+        color: #4b6587;
+      }
+
+      .content-section .left-side .people-count {
+        line-height: 2rem;
+        font-size: 1.7rem;
+        letter-spacing: 0.2rem;
+      }
+      .content-section .left-side .time {
+        font-size: 1.7rem;
+        letter-spacing: 0.2rem;
+        line-height: 2rem;
+      }
+      .content-section .left-side .people-count span {
+        font-size: 3rem;
+        color: #4b6587;
+      }
+      .guest {
+        background-color: #f7f6f2;
+        padding: 0 11px;
+        width: 340px;
+        height: 280px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
         justify-content: space-evenly;
-      }
-
-      .field {
-        background-color: #e2e2e2;
-        width: 700px;
-        margin: auto;
-        height: 100%;
-      }
-
-      .detailcard {
-        margin: 5px;
-        border: 1px solid black;
+        border-radius: 0 0 10px 0;
       }
 
       /* 로딩모달창 관련 스타일 */
@@ -432,6 +502,50 @@
       #staticBackdrop .btn-close {
         display: none;
       }
+
+      #detailCard .modal-footer {
+        border-top: none;
+        background-color: #f0e5cf;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10.5px 16px 21px 16px;
+      }
+
+      .modal-footer button:nth-child(1) {
+        background-color: #c8c6c6;
+        border: none;
+        font-size: 1.3rem;
+        color: black;
+        width: 100px;
+        margin-right: 10px;
+      }
+
+      .modal-footer button:nth-child(1):hover {
+        background-color: #a3a3a3;
+      }
+
+      .modal-footer button:nth-child(1):active {
+        transform: scale(0.98);
+      }
+
+      .modal-footer button:nth-child(2) {
+        background-color: #4b6587;
+        border: none;
+        font-size: 1.3rem;
+        width: 100px;
+        margin-left: 10px;
+      }
+
+      .modal-footer button:nth-child(2):hover {
+        background-color: #344f72;
+      }
+
+      .modal-footer button:nth-child(2):active {
+        transform: scale(0.98);
+      }
+
+      /*아래는 로딩 모달창 관련 스타일입니다*/
       .loader {
         border: 10px solid #f7f6f2;
         border-radius: 50%;
@@ -461,6 +575,19 @@
           transform: rotate(360deg);
         }
       }
+
+      .show-hover {
+        display: none;
+        font-weight: bolder;
+      }
+
+      .hover:hover .show-hover {
+        display: block;
+      }
+
+      .hover:hover .hidden-hover {
+        display: none;
+      }
     </style>
 
     <script>
@@ -481,15 +608,7 @@
           success: function (response) {
             let info = response.cards;
             let guest_info = response.guest;
-            let temp_html = `  <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">카드 상세보기</h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
-            </div>
+            let temp_html = `  
             <div class="modal-body" >
                 <div class="field">
                     <img
@@ -500,38 +619,47 @@
                     <div class="place">
                         <h4 class="display-3">${info.place}</h4>
                     </div>
-                    <h4 class="host">방장 : ${info.leaderId}(잔여 인원 : ${
-              info.people - guest_info.length
-            }명)</h4>
+                    <div class='content-section'>
+                      <div class='left-side'>
+                      <h3 class="host">방장 : <span>${info.leaderId}</span></h3>
+                      <h4 class='time'>${info.time}</h4>
+                      <h4 class='people-count'>
+                        남은 자리 <span>${
+                          info.people - guest_info.length
+                        }</span>명
+                      </h4>
+                      </div>
+                    
                     <div class="guest">`;
             for (let el of guest_info) {
               let phoneNumber = el["phone"];
               if (response.check === "false") phoneNumber = "010-****-****";
               temp_html += `<div class="detailcard" style="width: 18rem">
-                                <div class="card-body">
-                                    <h5 class="card-title">신청자 : ${el["id"]}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">${phoneNumber}</h6>
-                                </div>
-                            </div>`;
+                                          <div class="card-body">
+                                              <h5 class="card-title">신청자 : ${el["id"]}</h5>
+                                              <h6 class="card-subtitle mb-2 text-muted">${phoneNumber}</h6>
+                                          </div>
+                                      </div>`;
             }
 
             temp_html += `</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-                <button onclick="join(${info.index},${
+                        </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button onclick="join(${info.index},${
               info.people - guest_info.length
             })" type="button" class="btn btn-primary">
-                    신청하기
-                </button>
-            </div>`;
+                          신청하기
+                        </button>
+                     </div>`;
             $("#detailCard").append(temp_html);
           },
         });
@@ -651,7 +779,7 @@
       function sign_out() {
         $.removeCookie("mytoken", { path: "/" });
         alert("로그아웃!");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
 
       //모임신청을 위한 버튼함수
