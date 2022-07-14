@@ -30,15 +30,15 @@ SECRET_KEY = 'SPARTA'
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
-    
+    card_list = list(db.cards.find({}, {'_id': False}))
     if token_receive is None:
         status = 0
         user_id = None
-        return render_template('index.html', status=status, user_id=user_id)
+        return render_template('index.html', status=status, user_id=user_id, cards=card_list)
     else:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_id = payload['id']
-        return render_template('index.html', status=1, user_id=user_id)
+        return render_template('index.html', status=1, user_id=user_id, cards=card_list)
 
 @app.route('/signup')
 def signup():
@@ -63,8 +63,8 @@ def sign_in():
             'id': id_receive,
             # 'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        #token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
         #ec2 서버에서 json이 안날아가는 오류 수정하기위해 decode['utf-8] 붙여야함
 
         return jsonify({'result': 'success', 'token': token})
@@ -78,39 +78,36 @@ def people_join():
     token_receive = request.cookies.get('mytoken')
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     check = bool(db.join.find_one({"number": number_receive,'id':payload['id']}))
-    host = db.cards.find_one({"index": int(number_receive)})['leaderId']
+    card = db.cards.find_one({"index": int(number_receive)})
     if check:
         return jsonify({'msg': '이미 신청하셨습니다.'})
-    elif host == payload['id']:
+    elif card['leaderId'] == payload['id']:
         return jsonify({'msg': '주최자는 신청할수 없습니다.'})
     else:
         doc = {
             'number': number_receive,
             'id': payload['id']
         }
+        current_count = card['count']
+        db.cards.update_one({"index": int(number_receive)},{'$set':{'count': current_count+1}})
         db.join.insert_one(doc)
         return jsonify({'msg': '신청 완료!'})
 
 
-@app.route("/posts", methods=["get"])
-def render_cards():
-    card_list = list(db.cards.find({}, {'_id': False}))
-    for el in card_list:
-        idx = str(el['index'])
-        guest_count = len(list(db.join.find({'number':idx}, {'_id': False})))
-        el['count'] = guest_count
-    return jsonify({'cards': card_list})
+# @app.route("/posts", methods=["get"])
+# def render_cards():
+#     card_list = list(db.cards.find({}, {'_id': False}))
+#     return jsonify({'cards': card_list})
 
 
 @app.route("/DataSend", methods=["get"])
-def view_cards():
+def view_detail():
     token_receive = request.cookies.get('mytoken')
     index_receice = request.args.get("index_give")
     card_info = db.cards.find_one({'index': int(index_receice)}, {'_id': False})
     guest_count = list(db.join.find({'number':index_receice}, {'_id': False}))
     check = '';
 
-    print(token_receive)
     if token_receive is not None:
         id = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])['id']
         if id == card_info['leaderId']:
@@ -137,48 +134,58 @@ def card_post():
 
     #모임 등록한 사람의 token값을 가져와서 ID를 꺼내오는 부분
     token_receive = request.cookies.get('mytoken')
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
-    #각 카드별 index저장을 위한 코드
-    cardList_length = len(list(db.cards.find({}, {'_id': False})))
-    card_index = cardList_length + 1
+    #로그인하지 않은 유저의 글쓰기를 막기위한 if
+    if token_receive is not None:
+        id = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])['id']
 
-    #<--이미지 크롤링 코드 시작 -->
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    options.add_argument('window-size=1920x1080')
-    options.add_argument("--disable-gpu")
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
-    driver = webdriver.Chrome('chromedriver', options=options)
-    #driver = webdriver.Chrome(executable_path='/home/ubuntu/eattogether/chromedriver', options=options)
-    #ec2에서 크롬드라이버 경로를 잡지 못해서 절대경로를 사용해서 chromedriver 잡아줘야함
-    driver.get("https://www.google.co.kr/imghp?hl=ko&tab=wi&authuser=0&ogbl")
-    elem = driver.find_element(By.NAME, "q")  # 구글 검색창 선택
-    elem.send_keys(place_receive)  # 검색창에 검색할 내용(name)넣기
-    elem.send_keys(Keys.RETURN)  # 검색할 내용을 넣고 enter를 치는것!
-    driver.implicitly_wait(2)
-    driver.find_element(By.XPATH,
-                        '/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img').click()
-    time.sleep(1)
-    imgUrl = driver.find_element(By.XPATH,
-                                 '/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img').get_attribute(
-        "src")
-    driver.quit()
-    #<--이미지 크롤링 코드 끝-->
+        #각 카드별 index저장을 위한 코드
+        cardList_length = len(list(db.cards.find({}, {'_id': False})))
+        card_index = cardList_length + 1
 
-    obj = {
-        'title': title_receive,
-        'img': imgUrl,
-        'place': place_receive,
-        'people': people_receive,
-        'time': time_receive,
-        'index': card_index,
-        'leaderId' : payload['id']
-    }
-    db.cards.insert_one(obj);
+        #<--이미지 크롤링 코드 시작 -->
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        options.add_argument('window-size=1920x1080')
+        options.add_argument("--disable-gpu")
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+        # driver = webdriver.Chrome('chromedriver', options=options)
+        driver = webdriver.Chrome(executable_path='/home/ubuntu/eattogether/chromedriver', options=options)
+        #ec2에서 크롬드라이버 경로를 잡지 못해서 절대경로를 사용해서 chromedriver 잡아줘야함
+        driver.get("https://www.google.co.kr/imghp?hl=ko&tab=wi&authuser=0&ogbl")
+        elem = driver.find_element(By.NAME, "q")  # 구글 검색창 선택
+        elem.send_keys(place_receive)  # 검색창에 검색할 내용(name)넣기
+        elem.send_keys(Keys.RETURN)  # 검색할 내용을 넣고 enter를 치는것!
+        driver.implicitly_wait(2)
+        driver.find_element(By.XPATH,
+                            '/html/body/div[2]/c-wiz/div[3]/div[1]/div/div/div/div[1]/div[1]/span/div[1]/div[1]/div[1]/a[1]/div[1]/img').click()
+        time.sleep(1)
+        imgUrl = driver.find_element(By.XPATH,
+                                     '/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img').get_attribute(
+            "src")
+        driver.quit()
+        #<--이미지 크롤링 코드 끝-->
 
-    return jsonify({'msg': '로딩 성공!'})
+        obj = {
+            'title': title_receive,
+            'img': imgUrl,
+            'place': place_receive,
+            'people': people_receive,
+            'time': time_receive,
+            'index': card_index,
+            'leaderId' : id,
+            'count' : 0
+        }
+        db.cards.insert_one(obj);
+
+        return jsonify({'msg': '로딩 성공!', 'status': 1})
+    else:
+        return jsonify({'msg': '로그인이 필요한 서비스입니다.', 'status': 0})
+
+   
+
+    
 
 @app.route('/login', methods=['POST'])
 def sign_up():
