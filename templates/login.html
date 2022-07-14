@@ -14,14 +14,14 @@
       crossorigin="anonymous"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <title>loginPage</title>
+    <title>다같이-밥먹자!</title>
     <!-- Bulma CSS 링크 -->
     <link
       rel="stylesheet"
@@ -96,42 +96,36 @@
         border: 1px solid #4b6587;
         transition: all 0.3s;
       }
-      #exampleModal{
-          z-index: 3000;
+      #exampleModal {
+        z-index: 3000;
       }
-      .joinbtn{
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
+      .joinbtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-      .joinbtn > button{
-          margin-right: 20px;
-          margin-bottom: 30px;
-          background-color: transparent;
-
+      .joinbtn > button {
+        margin-right: 20px;
+        margin-bottom: 30px;
+        background-color: transparent;
       }
 
-      #modal_back{
-          background-color: #f7f6f2;
-          border-radius: 30px;
+      #modal_back {
+        background-color: #f7f6f2;
+        border-radius: 30px;
       }
 
-      button.btn:nth-child(1) { {#밖에 조인이랑 연결되어있음#}
-          height: 50px;
-          color: #4b6587;
+      button.btn:nth-child(1) {
+        height: 50px;
+        color: #4b6587;
       }
 
       #exampleModal .joinbtn button:hover {
-          color: white;
-          background: #4b6587;
-          border: 1px solid #4b6587;
-          transition: all 0.3s;
+        color: white;
+        background: #4b6587;
+        border: 1px solid #4b6587;
+        transition: all 0.3s;
       }
-
-
-
-
     </style>
     <script>
       //모달 토글 시도
@@ -166,7 +160,7 @@
           },
           success: function (response) {
             if (response["result"] == "success") {
-              $.cookie('mytoken', response["token"], { path: '/' });
+              $.cookie("mytoken", response["token"], { path: "/" });
               window.location.replace("/");
             } else {
               alert(response["msg"]);
@@ -175,75 +169,76 @@
         });
       }
       function sign_up() {
-          let username = $("#join_id").val()
-          let password = $("#join_pw").val()
-          let phone = $("#join_phone").val()
-          let ok = false
-          console.log(username, password, phone)
+        let username = $("#join_id").val();
+        let password = $("#join_pw").val();
+        let phone = $("#join_phone").val();
+        let ok = false;
+        console.log(username, password, phone);
 
-          if (username == "") {
-              alert("아이디를 입력하세요!")
-              return;
-          }else if (!is_nickname(username)){
-              alert("아이디의 형식을 확인해주세요. 한글과 숫자,영어 일부 특수문자(._-) 사용 가능. 2-15자 길이")
-              let obj = $('#join_id'); //클릭후 이상있으면  input 텍스트박스 리셋
-              for(let i=0;i<obj.length;i++){
-                  obj[i].value='';
-              }
-              return;
+        if (username == "") {
+          alert("아이디를 입력하세요!");
+          return;
+        } else if (!is_nickname(username)) {
+          alert(
+            "아이디의 형식을 확인해주세요. 한글과 숫자,영어 일부 특수문자(._-) 사용 가능. 2-15자 길이"
+          );
+          let obj = $("#join_id"); //클릭후 이상있으면  input 텍스트박스 리셋
+          for (let i = 0; i < obj.length; i++) {
+            obj[i].value = "";
           }
+          return;
+        }
 
-          if (password == "") {
-                  alert("비밀번호를 입력해주세요")
-              return;
-              } else if (phone == "") {
-                  alert("휴대폰번호를 입력해주세요")
-              return;
-              }else if(true) {
-              $.ajax({
+        if (password == "") {
+          alert("비밀번호를 입력해주세요");
+          return;
+        } else if (phone == "") {
+          alert("휴대폰번호를 입력해주세요");
+          return;
+        } else if (true) {
+          $.ajax({
+            type: "POST",
+            url: "/login/check",
+            data: {
+              username_give: username,
+            },
+            success: function (response) {
+              console.log(response["exists"]);
+              if (response["exists"]) {
+                alert("존재하는 아이디 입니다.");
+                let obj = $("#join_id"); //클릭후 이상있으면  input 텍스트박스 리셋
+                for (let i = 0; i < obj.length; i++) {
+                  obj[i].value = "";
+                }
+                return;
+              } else {
+                $.ajax({
                   type: "POST",
-                  url: "/login/check",
+                  url: "/login",
                   data: {
-                      username_give: username
+                    username_give: username,
+                    password_give: password,
+                    phone_give: phone,
                   },
                   success: function (response) {
-                      console.log(response["exists"])
-                      if (response["exists"]) {
-                          alert("존재하는 아이디 입니다.")
-                          let obj = $('#join_id'); //클릭후 이상있으면  input 텍스트박스 리셋
-                          for (let i = 0; i < obj.length; i++) {
-                              obj[i].value = '';
-                          }
-                          return;
-                      } else {
-                          $.ajax({
-                      type: "POST",
-                      url: "/login",
-                      data: {
-                          username_give: username,
-                          password_give: password,
-                          phone_give: phone
-                      },
-                      success: function (response) {
-                          alert("회원가입을 축하드립니다!")
-                          window.location.replace("/login")
-                      }
-                  });
-                      }
-                  }
-              })
-          }
-
+                    alert("회원가입을 축하드립니다!");
+                    window.location.replace("/login");
+                  },
+                });
+              }
+            },
+          });
+        }
       }
 
       function sign_close() {
-          window.location.replace("/login")
+        window.location.replace("/login");
       }
 
       function is_nickname(asValue) {
-          let regExp = /^(?=.*[a-zA-Zㄱ-힣])[-a-zA-Zㄱ-힝0-9_.]{2,15}$/;
-          console.log(regExp.test(asValue))
-          return regExp.test(asValue);
+        let regExp = /^(?=.*[a-zA-Zㄱ-힣])[-a-zA-Zㄱ-힝0-9_.]{2,15}$/;
+        console.log(regExp.test(asValue));
+        return regExp.test(asValue);
       }
     </script>
   </head>
@@ -286,7 +281,8 @@
           <button
             type="button"
             class="btn"
-            data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
             style="font-size: small"
           >
             아직 계정이 없으신가요?
@@ -302,40 +298,77 @@
           </button>
         </div>
       </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" id="modal_back">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">회원가입</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" id="modal_back">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">회원가입</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
 
-      <div class="modal-body">
+            <div class="modal-body">
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="join_id"
+                  placeholder="글자수 15개제한"
+                />
+                <label for="floatingInput">ID</label>
+              </div>
 
-          <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="join_id" placeholder="글자수 15개제한" >
-              <label for="floatingInput">ID</label>
+              <div class="form-floating mb-3">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="join_pw"
+                  placeholder="name@example.com"
+                />
+                <label for="floatingInput">Password</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="join_phone"
+                  placeholder="name@example.com"
+                />
+                <label for="floatingInput">Phone</label>
+              </div>
+            </div>
+
+            <div class="joinbtn">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="sign_close()"
+              >
+                뒤로가기
+              </button>
+              <!-- 버튼색상확인  -->
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="sign_up()"
+              >
+                가입하기!
+              </button>
+            </div>
           </div>
-
-          <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="join_pw" placeholder="name@example.com">
-              <label for="floatingInput">Password</label>
-          </div>
-
-          <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="join_phone" placeholder="name@example.com" >
-              <label for="floatingInput">Phone</label>
-          </div>
-
+        </div>
       </div>
-
-      <div class="joinbtn" >
-        <button type="button" class="btn btn-secondary" onclick="sign_close()" >뒤로가기</button> <!-- 버튼색상확인  -->
-        <button type="button" class="btn btn-secondary" onclick="sign_up()">가입하기!</button>
-      </div>
-    </div>
-  </div>
-</div>
     </section>
   </body>
 </html>
